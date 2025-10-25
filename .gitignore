@@ -1,0 +1,42 @@
+# Build output
+/target/
+build/
+out/
+
+# IDE files
+/.idea/
+/.vscode/
+/*.iml
+*.class
+
+# Maven Wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
+*.out
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Environment & local configs
+application-*.properties
+application-*.yml
+.env
+*.secret
+
+# Backup / temp files
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Dependency directories
+/node_modules/
+/dist/
+
+# JAR / WAR / EAR
+*.jar
+*.war
+*.ear
