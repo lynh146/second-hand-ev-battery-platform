@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Thanh toán - EV Trading</title>
+    <link rel="stylesheet" href="../static/css/payment.css" />
+  </head>
+  <body>
+    <div class="payment-box">
+      <h2>Thanh toán</h2>
+
+      <div class="payment-item">
+        <p>Sản phẩm: <strong th:text="${item.name}"></strong></p>
+        <p>
+          Giá:
+          <span th:text="${#numbers.formatInteger(item.price, 0)} + 'đ'"></span>
+        </p>
+        <p>
+          Phí nền tảng 5%:
+          <span th:text="${#numbers.formatInteger(fee, 0)} + 'đ'"></span>
+        </p>
+        <p>
+          Tổng tiền:
+          <span
+            style="color: red"
+            th:text="${#numbers.formatInteger(total, 0)} + 'đ'"
+          ></span>
+        </p>
+      </div>
+
+      <form>
+        <label>Phương thức thanh toán:</label>
+        <select required>
+          <option value="momo">Momo</option>
+          <option value="bank">Ngân hàng</option>
+        </select>
+        <button class="btn-confirm">Xác nhận thanh toán</button>
+      </form>
+    </div>
+  </body>
+</html>
