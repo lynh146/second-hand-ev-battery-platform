@@ -2,6 +2,7 @@ package com.example.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,20 +20,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "Notification")
+@Table(name = "NOTIFICATION") 
 public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "NotificationID") 
     private Long notificationID;
 
     @ManyToOne
-    @JoinColumn(name = "userID")
+    @JoinColumn(name = "UserID")  
     private User user;
 
+    @Column(name = "Title")
     private String title;
+
+    @Column(name = "Message")
     private String message;
+
+    @Column(name = "Type")
     private String type;
+
+    @Column(name = "CreatedAt")
     private LocalDateTime createdAt;
+
+    @Column(name = "IsRead")
     private Boolean isRead;
 }

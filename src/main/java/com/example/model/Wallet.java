@@ -3,6 +3,7 @@ package com.example.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,18 +21,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "Wallet")
+@Table(name = "WALLET")
 public class Wallet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "WalletID")
     private Long walletID;
 
     @ManyToOne
-    @JoinColumn(name = "userID")
+    @JoinColumn(name = "UserID") 
     private User user;
 
+    @Column(name = "Balance")
     private BigDecimal balance;
+
+    @Column(name = "CreatedAt")
     private LocalDateTime createdAt;
+
+    @Column(name = "Status")
     private String status;
 }
