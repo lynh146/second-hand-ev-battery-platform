@@ -40,3 +40,7 @@ application-*.yml
 *.jar
 *.war
 *.ear
+
+# Local environment config
+src/main/resources/application.properties
+.env
