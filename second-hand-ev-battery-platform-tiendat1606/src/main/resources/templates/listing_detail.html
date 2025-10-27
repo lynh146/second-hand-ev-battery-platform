@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chi tiết sản phẩm - EV Trading</title>
+    <link rel="stylesheet" href="../static/css/detail.css" />
+  </head>
+  <body>
+    <div class="detail-container">
+      <img class="detail-img" th:src="@{/${item.image}}" alt="EV image" />
+      <div class="detail-info">
+        <h2 th:text="${item.name}"></h2>
+        <p>
+          <strong>Giá bán:</strong>
+          <span th:text="${#numbers.formatInteger(item.price, 0)} + 'đ'"></span>
+        </p>
+        <p>
+          <strong>Dung lượng pin:</strong>
+          <span th:text="${item.battery}"></span>
+        </p>
+        <p><strong>Quãng đường:</strong> <span th:text="${item.km}"></span></p>
+        <p>
+          <strong>Năm sản xuất:</strong> <span th:text="${item.year}"></span>
+        </p>
+        <p>
+          <strong>Tình trạng:</strong> <span th:text="${item.status}"></span>
+        </p>
+        <p>
+          <strong>Mô tả:</strong> <span th:text="${item.description}"></span>
+        </p>
+        <a class="btn-confirm" th:href="@{/payment/{id}(id=${item.id})}"
+          >Mua ngay</a
+        >
+      </div>
+    </div>
+  </body>
+</html>

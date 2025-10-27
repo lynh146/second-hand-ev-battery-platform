@@ -22,7 +22,7 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "AdminID")   // giữ nguyên đúng như trong DB
-    private Long adminID;
+    private Long adminID; 
 
     @Column(name = "FullName")
     private String fullName;
