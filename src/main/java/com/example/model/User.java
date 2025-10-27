@@ -1,35 +1,34 @@
 package com.example.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Table(name = "User")
+@Entity
+@Table(name = "user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userID;
 
+    @Column(nullable = false, length = 100)
     private String fullName;
+
+    @Column(unique = true, nullable = false, length = 100)
     private String email;
+
+    @Column(nullable = false)
     private String password;
+
     private String phoneNumber;
+
     private String address;
-    private String role; // Buyer, Seller, Admin, etc.
+
+    private String role;
+
     private LocalDateTime registerDate;
+
     private String status;
-
-    // --- Relationships ---
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Wallet> wallets;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Notification> notifications;
 }
