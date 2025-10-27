@@ -1,1 +1,0 @@
-# second-hand-ev-battery-platform
