@@ -1,10 +1,19 @@
-package com.example.repository;
+package com.example.service.impl;
 
 import com.example.model.Admin;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.example.repository.AdminRepository;
+import org.springframework.stereotype.Service;
 
-@Repository
-public interface AdminRepository extends JpaRepository<Admin, Long> {
-    Admin findByEmailAndPassword(String email, String password);
+@Service
+public class AdminServiceImpl {
+
+    private final AdminRepository adminRepository;
+
+    public AdminServiceImpl(AdminRepository adminRepository) {
+        this.adminRepository = adminRepository;
+    }
+
+    public Admin login(String email, String password) {
+        return adminRepository.findByEmailAndPassword(email, password);
+    }
 }
