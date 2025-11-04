@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Trang quản trị</title>
+</head>
+<body>
+  <h2>Chào mừng <span th:text="${admin.fullName}"></span></h2>
+
+  <ul>
+    <li><a href="/admin/listings">Duyệt tin đăng</a></li>
+    <li><a href="/admin/users">Quản lý người dùng</a></li>
+    <li><a href="/admin/complaints">Khiếu nại</a></li>
+    <li><a href="/admin/reports">Báo cáo & thống kê</a></li>
+  </ul>
+</body>
+</html>
