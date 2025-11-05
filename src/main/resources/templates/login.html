@@ -1,19 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
-  <link rel="stylesheet" href="../static/css/login.css">
+  <title>Đăng nhập</title>
+  <link th:href="@{/../static/css/login.css}" rel="stylesheet">
 </head>
 <body class="form-page">
   <div class="container">
-    <h2>Login</h2>
-    <form>
-      <input type="text" name="username" placeholder="Username" required>
-      <input type="password" name="password" placeholder="Password" required>
-      <button type="submit" class="login-btn">Login</button>
+    <h2>Đăng nhập</h2>
+    <form id="loginForm" th:action="@{/login}" method="post">
+      <input type="text" name="username" placeholder="Tên đăng nhập" required>
+      <input type="password" name="password" placeholder="Mật khẩu" required>
+      <button type="submit" class="login-btn">Đăng nhập</button>
     </form>
-    <p>Don't have an account? <a href="#">Register</a></p>
+
+    <p>Chưa có tài khoản? 
+      <a th:href="@{/register}">Đăng ký</a>
+    </p>
   </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const body = {
+        username: e.target.username.value,
+        password: e.target.password.value
+      };
+
+      try {
+        const res = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (data.success) {
+          window.location.href = "/profile";
+        } else {
+          alert("Sai tên đăng nhập hoặc mật khẩu!");
+        }
+      } catch (err) {
+        console.error("Lỗi khi đăng nhập:", err);
+      }
+    });
+  </script>
 </body>
 </html>
