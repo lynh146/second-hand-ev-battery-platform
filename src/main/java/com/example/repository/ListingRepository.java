@@ -13,4 +13,6 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
     List<Listing> findByDescriptionContainingIgnoreCase(String keyword);
 
     List<Listing> findByApprovedBy(Admin admin);
+
+    List<Listing> findByApprovedTrueAndStatusAndTitleContainingIgnoreCase(String status, String keyword);
 }
