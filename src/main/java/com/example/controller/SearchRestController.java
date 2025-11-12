@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/public")
 @RequiredArgsConstructor
 public class SearchRestController {
-private final IListingService listingService;
+  private final IListingService listingService;
 
   @GetMapping("/search/simple")
   public List<Listing> search(@RequestParam String keyword) {
@@ -17,8 +17,7 @@ private final IListingService listingService;
   }
 
   @GetMapping("/featured")
-  public List<Listing> featured(@RequestParam(defaultValue="12") int limit) {
-    return listingService.searchListing("").stream().limit(limit).toList();
+  public List<Listing> featured(@RequestParam(defaultValue= "12") int limit) {
+    return listingService.featured(limit);
   }
-
 }

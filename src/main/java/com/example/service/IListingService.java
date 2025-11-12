@@ -8,4 +8,5 @@ public interface IListingService {
     void createListing(Listing l);
     void approveListing(Long id, Admin a);
     List<Listing> searchListing(String keyword); 
+    List<Listing> featured(int limit);
 }
