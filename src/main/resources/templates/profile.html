@@ -1,29 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Profile</title>
-  <link rel="stylesheet" href="../static/css/profile.css">
+  <link rel="stylesheet" href="/css/profile.css">
 </head>
+
 <body class="profile-page">
-  <header class="profile-header">
-    <div class="cover"></div>
-    <div class="avatar">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
-    </div>
-  </header>
 
-  <main class="profile-content">
-    <div class="user-info">
-      <h1>Võ Thế Diễn</h1>
-      <p class="email">dien123@gmail.com</p>
-      <p class="joined">Joined October 2025</p>
-    </div>
+<header class="profile-header">
+  <div class="cover"></div>
+  <div class="avatar">
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+  </div>
+</header>
 
-    <div class="action-buttons">
+<main class="profile-content">
+
+  <div class="user-info" th:object="${user}">
+    <h1 th:text="*{fullName}">User Name</h1>
+    <p class="email"><strong>Email: </strong><span th:text="*{email}"></span></p>
+    <p class="joined">
+      <strong>Ngày tham gia: </strong>
+      <span th:text="${#temporals.format(user.registerDate, 'dd/MM/yyyy')}">date</span>
+    </p>
+  </div>
+
+  <div class="wallet-section" th:if="${wallet != null}">
+    <h2>Ví điện tử</h2>
+    <p><strong>Số dư:</strong> <span th:text="${wallet.balance}"></span> VNĐ</p>
+    <a th:href="@{'/notifications/user/' + ${user.userId}}">Xem thông báo</a>
+  </div>
+
+  <div class="action-buttons">
+    <a th:href="@{'/edit-profile/' + ${user.userId}}">
       <button class="edit-btn">Edit Profile</button>
+    </a>
+
+    <a th:href="@{/logout}">
       <button class="logout-btn">Logout</button>
-    </div>
-  </main>
+    </a>
+  </div>
+
+</main>
+
 </body>
 </html>

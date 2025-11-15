@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông báo của bạn</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; }
+        h1 { margin-bottom: 16px; }
+        ul { list-style: none; padding: 0; }
+        li { border-bottom: 1px solid #ddd; padding: 10px 0; }
+        .unread { font-weight: bold; }
+        .time { font-size: 0.85rem; color: #666; }
+        form { display: inline; margin-left: 8px; }
+        button { cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<h1>Thông báo của bạn</h1>
+
+<ul>
+    <li th:each="n : ${notifications}"
+        th:classappend="${n.isRead} ? '' : 'unread'">
+        <div>
+            <span th:text="${n.title}">Tiêu đề</span>
+        </div>
+        <div>
+            <span th:text="${n.message}">Nội dung</span>
+        </div>
+        <div class="time">
+            <span th:text="${#dates.format(n.createdAt, 'dd/MM/yyyy HH:mm')}">thời gian</span>
+            <span th:if="${n.type != null}"> • <span th:text="${n.type}">type</span></span>
+        </div>
+
+        <!-- Nếu chưa đọc thì cho nút "Đánh dấu đã đọc" -->
+        <form th:if="${!n.isRead}"
+              th:action="@{'/notifications/' + ${n.notificationId} + '/read'}"
+              method="post">
+            <input type="hidden" name="userId" th:value="${userId}" />
+            <button type="submit">Đánh dấu đã đọc</button>
+        </form>
+        <span th:if="${n.isRead}">✅ Đã đọc</span>
+    </li>
+</ul>
+
+</body>
+</html>
