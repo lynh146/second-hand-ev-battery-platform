@@ -1,45 +1,37 @@
 package com.example.dao;
 
-import com.example.model.Admin;
 import com.example.model.Listing;
 import com.example.repository.ListingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class ListingDAO {
 
-    @Autowired
-    private ListingRepository listingRepository;
-
-    public List<Listing> findAll() {
-        return listingRepository.findAll();
+    private final ListingRepository listingRepository;
+    
+    public Listing create(Listing listing) {
+        return listingRepository.save(listing);
     }
 
     public Optional<Listing> findById(Long id) {
         return listingRepository.findById(id);
     }
 
+    public List<Listing> findAll() {
+        return listingRepository.findAll();
+    }
+
     public Listing save(Listing listing) {
         return listingRepository.save(listing);
     }
 
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         listingRepository.deleteById(id);
     }
 
-    public List<Listing> searchByKeyword(String keyword) {
-        return listingRepository.findByDescriptionContainingIgnoreCase(keyword);
-    }
-
-    public List<Listing> findByStatus(String status) {
-        return listingRepository.findByStatus(status);
-    }
-
-    public List<Listing> findByApprovedBy(Admin admin) {
-        return listingRepository.findByApprovedBy(admin);
-    }
 }
