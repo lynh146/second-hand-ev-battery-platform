@@ -1,27 +1,53 @@
-package com.example.evplatform.model;
+package com.example.model;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "PAYMENT")
 public class Payment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "PaymentID")
+    private Long paymentID;
 
-    private Double amount;
-    private String method;
-    private String status;
-
+    // GIỮ NGUYÊN: Khóa ngoại TransactionID (Đúng theo sơ đồ ERD)
     @ManyToOne
-    @JoinColumn(name = "transaction_id")
+    @JoinColumn(name = "TransactionID", nullable = false)
     private Transaction transaction;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "Amount", precision = 10, scale = 2)
+    private BigDecimal amount;
+
+    @Column(name = "PaymentMethod")
+    private String paymentMethod;
+
+    @Column(name = "PaymentDate")
+    private LocalDateTime paymentDate;
+
+    @Column(name = "Status")
+    private String status;
+
+
+    @Column(name = "CommissionFee", precision = 10, scale = 2)  
+    private BigDecimal commissionFee;
+
+   
+    @Column(name = "PaymentGatewayRef")  
+    private String paymentGatewayRef;
+
+    @Column(name = "GatewayTransactionID")  
+    private String gatewayTransactionID;
+
+    @Column(name = "GatewayResponseCode")  
+    private String gatewayResponseCode;
+    
+    @Column(name = "SecureHash")  
 }
