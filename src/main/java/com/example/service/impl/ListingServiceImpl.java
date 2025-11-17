@@ -1,30 +1,46 @@
 package com.example.service.impl;
 
-import com.example.dao.ListingDAO;
+import com.example.model.Admin;
 import com.example.model.Listing;
-import com.example.service.ListingService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.repository.ListingRepository;
+import com.example.service.IListingService;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class ListingServiceImpl implements ListingService {
+@Primary 
+@RequiredArgsConstructor
+@Transactional
+public class ListingServiceImpl implements IListingService {
 
-    @Autowired
-    private ListingDAO listingDAO;
+    private final ListingRepository listingRepository;
 
     @Override
-    public Listing create(Listing listing) {
-        return listingDAO.save(listing);
+    public Listing createListing(Listing listing) {
+        listing.setCreatedAt(LocalDateTime.now());
+        if (listing.getStatus() == null) {
+            listing.setStatus("PENDING");
+        }
+        return listingRepository.save(listing);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Listing> findAll() {
-        return listingDAO.findAll();
+        return listingRepository.findAll();
     }
-    @Override
-    public Listing findById(Long id) {
-    return listingDAO.findById(id).orElse(null);
-}
 
-}
+    @Override
+    @Transactional(readOnly = true)
+    public Listing findById(Long id) {
+        return listingRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Listing not found with id = " + id));
+    }
