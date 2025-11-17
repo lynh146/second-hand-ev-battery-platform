@@ -1,29 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Profile</title>
-  <link rel="stylesheet" href="../static/css/profile.css">
+    <meta charset="UTF-8">
+    <title>Thông tin cá nhân</title>
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
 </head>
-<body class="profile-page">
-  <header class="profile-header">
-    <div class="cover"></div>
-    <div class="avatar">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
-    </div>
-  </header>
 
-  <main class="profile-content">
-    <div class="user-info">
-      <h1>Võ Thế Diễn</h1>
-      <p class="email">dien123@gmail.com</p>
-      <p class="joined">Joined October 2025</p>
+<body>
+
+<div class="profile-container">
+
+    <div class="card">
+
+        <div class="avatar-section">
+            <img src="https://ui-avatars.com/api/?name=User&background=4CAF50&color=fff&size=128"
+                 alt="avatar" class="avatar">
+            <h2 th:text="${user.fullName}">Tên người dùng</h2>
+            <p class="email" th:text="${user.email}">email@gmail.com</p>
+        </div>
+
+        <hr>
+
+        <div class="info-section">
+            <h3>Thông tin tài khoản</h3>
+
+            <p><strong>Số điện thoại:</strong> <span th:text="${user.phoneNumber}">0900000000</span></p>
+            <p><strong>Địa chỉ:</strong> <span th:text="${user.address}">Địa chỉ</span></p>
+            <p><strong>Trạng thái:</strong> <span th:text="${user.status}">ACTIVE</span></p>
+        </div>
+
+        <hr>
+
+        <div class="wallet-section">
+            <h3>Ví của bạn</h3>
+            <p><strong>Số dư:</strong> <span th:text="${wallet.balance}">0</span> đ</p>
+            <p><strong>Trạng thái ví:</strong> <span th:text="${wallet.status}">ACTIVE</span></p>
+        </div>
+
+        <div class="actions">
+            <a href="/logout" class="logout-btn">Đăng xuất</a>
+        </div>
+
     </div>
 
-    <div class="action-buttons">
-      <button class="edit-btn">Edit Profile</button>
-      <button class="logout-btn">Logout</button>
-    </div>
-  </main>
+</div>
+
 </body>
 </html>
