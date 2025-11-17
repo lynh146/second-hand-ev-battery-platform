@@ -17,11 +17,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "WALLET")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "WALLET")
 public class Wallet {
 
     @Id
@@ -30,10 +30,10 @@ public class Wallet {
     private Long walletID;
 
     @ManyToOne
-    @JoinColumn(name = "UserID") 
+    @JoinColumn(name = "UserID", nullable = false)
     private User user;
 
-    @Column(name = "Balance")
+    @Column(name = "Balance", precision = 15, scale = 2)
     private BigDecimal balance;
 
     @Column(name = "CreatedAt")
@@ -42,3 +42,4 @@ public class Wallet {
     @Column(name = "Status")
     private String status;
 }
+

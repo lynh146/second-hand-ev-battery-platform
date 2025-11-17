@@ -1,19 +1,25 @@
 package com.example.service;
 
-import com.example.model.User;
-import com.example.repository.UserRepository;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.example.model.User;
+import com.example.model.Wallet;
+import com.example.repository.UserRepository;
+import com.example.repository.WalletRepository;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+     @Autowired
+    private WalletRepository walletRepository; 
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -26,11 +32,21 @@ public class UserService {
     }
 
     public User registerUser(User user) {
-        if (userRepository.findByEmail(user.getEmail()) != null) {
-            throw new RuntimeException("Email đã tồn tại!");
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+         if (userRepository.findByEmail(user.getEmail()) != null) {
+        throw new RuntimeException("Email đã tồn tại!");
+    }
+
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+    User savedUser = userRepository.save(user);
+
+    Wallet wallet = new Wallet();
+    wallet.setUser(savedUser);
+    wallet.setBalance(BigDecimal.ZERO); 
+    wallet.setStatus("ACTIVE");
+    walletRepository.save(wallet);
+
+    return savedUser;
     }
 
     public User loginUser(String email, String password) {
