@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8" />
+    <title th:text="${title}">EV Second-hand Platform</title>
+    <link rel="stylesheet" th:href="@{/css/base.css}" />
+    <!-- Mỗi trang có thể truyền CSS riêng qua extraCss -->
+    <th:block th:insert="${extraCss}"></th:block>
+</head>
+
+<body th:fragment="site-header">
+<header class="site-header">
+    <div class="container header-inner">
+        <a th:href="@{/}" class="brand">
+            <span class="brand-logo">⚡</span>
+            <span class="brand-text">
+                <span class="brand-name">EV Trade</span>
+                <span class="brand-sub">Second-hand EV &amp; Battery</span>
+            </span>
+        </a>
+
+        <nav class="main-nav">
+            <a th:href="@{/}" class="nav-link">Trang chủ</a>
+            <a th:href="@{/search}" class="nav-link">Tìm kiếm</a>
+            <a th:href="@{/member/dashboard}" class="nav-link">Tin đăng của tôi</a>
+        </nav>
+
+        <!-- GUEST: chưa đăng nhập -->
+        <div class="header-actions header-actions-guest" sec:authorize="isAnonymous()">
+            <a th:href="@{/login}" class="btn btn-ghost">Đăng nhập</a>
+            <a th:href="@{/register}" class="btn btn-primary">Đăng ký</a>
+        </div>
+
+        <!-- USER: đã đăng nhập -->
+        <div class="header-actions header-actions-user" sec:authorize="isAuthenticated()">
+            <span class="user-name">
+                <!-- Lấy tên đăng nhập từ Spring Security -->
+                <span sec:authentication="name">User Name</span>
+            </span>
+            <a th:href="@{/member/dashboard}" class="btn btn-ghost">Bảng tin</a>
+
+            <!-- Logout là POST /logout -->
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-outline">Đăng xuất</button>
+            </form>
+        </div>
+    </div>
+</header>
+</body>
+</html>

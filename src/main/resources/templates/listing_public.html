@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head th:replace="fragments/header :: head('Chi tiết tin đăng', 'listing_public.css', 'listing_public.js')"></head>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container py-4 detail-page" th:object="${listing}">
+    <div class="row g-4">
+        <!-- LEFT: INFO -->
+        <div class="col-lg-8">
+            <div class="ev-card p-3 mb-3">
+                <span class="badge-soft mb-2" th:text="*{status}">PUBLIC</span>
+                <h1 class="detail-title mb-2" th:text="*{title}">Tesla Model 3 Long Range</h1>
+                <p class="text-muted mb-2">
+                    Đăng bởi
+                    <span th:text="*{user.fullName}">Nguyễn Văn A</span>
+                    ·
+                    <span th:text="${#temporals.format(listing.createdAt,'dd/MM/yyyy HH:mm')}">
+                        10/11/2025
+                    </span>
+                </p>
+                <p th:text="*{description}">
+                    Mô tả chi tiết...
+                </p>
+            </div>
+
+            <!-- REVIEWS -->
+            <div class="ev-card p-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h2 class="section-title mb-0">Đánh giá</h2>
+                    <a th:href="@{'/member/listings/' + ${listing.listingID} + '/review'}"
+                       class="btn btn-sm btn-outline-primary rounded-pill">
+                        Viết đánh giá
+                    </a>
+                </div>
+
+                <div th:if="${reviewsPage.empty}">
+                    <p class="text-muted mb-0">Chưa có đánh giá nào cho tin này.</p>
+                </div>
+
+                <div class="review-list"
+                     th:if="${!reviewsPage.empty}">
+                    <div class="review-item border-bottom pb-2 mb-2"
+                         th:each="rv : ${reviewsPage.content}">
+                        <div class="d-flex justify-content-between">
+                            <div class="fw-semibold">
+                                <span th:text="${rv.reviewer != null ? rv.reviewer.fullName : 'Người dùng ẩn danh'}">
+                                    User
+                                </span>
+                            </div>
+                            <div class="review-stars">
+                                <span th:each="i : ${#numbers.sequence(1, rv.rating)}">★</span>
+                                <span th:each="i : ${#numbers.sequence(rv.rating+1,5)}"
+                                      class="text-muted">★</span>
+                            </div>
+                        </div>
+                        <p class="mb-1" th:text="${rv.comment}">Nội dung bình luận...</p>
+                        <div class="small text-muted"
+                             th:text="${#temporals.format(rv.createdAt,'dd/MM/yyyy HH:mm')}">
+                            10/11/2025 10:00
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: SIDEBAR -->
+        <div class="col-lg-4">
+            <div class="ev-card p-3 mb-3 sticky-top sidebar-card">
+                <div class="price-big mb-2"
+                     th:text="${#numbers.formatDecimal(listing.price,0,'COMMA',0,'POINT')} + ' đ'">
+                    500.000.000 đ
+                </div>
+                <p class="small text-muted mb-3">
+                    Giá đã bao gồm phí nền tảng và bảo vệ giao dịch.
+                </p>
+                <button class="btn btn-ev-primary w-100 mb-2" type="button">
+                    Mua ngay
+                </button>
+                <button class="btn btn-outline-secondary w-100" type="button">
+                    Thêm vào danh sách yêu thích
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

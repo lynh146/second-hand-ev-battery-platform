@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+
+<head th:replace="fragments/header :: head('Tìm kiếm - EVMarket', 'search.css', 'search.js')"></head>
+
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container py-4 search-page">
+
+    <!-- SEARCH BAR -->
+    <div class="ev-card p-3 mb-4 search-bar">
+        <form class="row g-2 align-items-center" th:action="@{/search}" method="get">
+            <div class="col-md-8">
+                <input class="form-control" type="text" name="keyword"
+                       th:value="${keyword}"
+                       placeholder="Nhập tên xe, pin, hãng...">
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <button class="btn btn-ev-primary flex-grow-1" type="submit">Tìm kiếm</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- RESULT LIST -->
+    <h2 class="section-title mb-3">Kết quả tìm kiếm</h2>
+    <p class="section-subtitle mb-3" th:if="${keyword != null}">
+        Từ khóa: "<span th:text="${keyword}"></span>"
+    </p>
+
+    <div class="row g-3">
+        <div class="col-12" th:if="${#lists.isEmpty(results)}">
+            <div class="ev-card p-4 text-center text-muted">
+                Không tìm thấy tin phù hợp. Thử từ khóa khác nhé.
+            </div>
+        </div>
+
+        <div class="col-12"
+             th:each="listing : ${results}">
+            <a class="text-decoration-none text-reset"
+               th:href="@{/listings/{id}(id=${listing.listingID})}">
+                <div class="ev-card p-3 d-flex flex-column flex-md-row gap-3 result-item">
+                    <div class="result-thumbnail"></div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h5 class="mb-0" th:text="${listing.title}">Tên tin đăng</h5>
+                            <span class="badge-soft" th:text="${listing.status}">PUBLIC</span>
+                        </div>
+                        <p class="text-truncate-2 mb-2 text-muted"
+                           th:text="${listing.description}">
+                            Mô tả tin đăng...
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center small">
+                            <span class="price"
+                                  th:text="${#numbers.formatDecimal(listing.price,0,'COMMA',0,'POINT')} + ' đ'">
+                                500.000.000 đ
+                            </span>
+                            <span th:text="${#temporals.format(listing.createdAt,'dd/MM/yyyy')}">
+                                10/11/2025
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
