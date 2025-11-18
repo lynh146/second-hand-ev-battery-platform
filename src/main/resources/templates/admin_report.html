@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>📊 Thống kê hệ thống</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">📊 Thống kê hệ thống</h2>
+
+    <div class="row text-center">
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 th:text="${totalUsers}">0</h4>
+                    <p>👤 Tổng người dùng</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 th:text="${totalListings}">0</h4>
+                    <p>📦 Tổng tin đăng</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 th:text="${pendingListings}">0</h4>
+                    <p>🕒 Tin chờ duyệt</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 th:text="${pendingComplaints}">0</h4>
+                    <p>📮 Khiếu nại chờ xử lý</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="text-center">
+        <a href="admin_dashboard.html" class="btn btn-secondary">⬅ Quay lại Dashboard</a>
+    </div>
+</div>
+
+</body>
+</html>
