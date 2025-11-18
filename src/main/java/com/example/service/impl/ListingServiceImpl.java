@@ -31,4 +31,19 @@ public class ListingServiceImpl implements ListingService {
     public Listing findById(Long id) {
         return listingRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public List<Listing> getPendingListings() {
+        return listingRepository.findByStatus("pending");
+    }
+
+    @Override
+    public Listing updateStatus(Long id, String status) {
+        Listing listing = listingRepository.findById(id).orElse(null);
+        if (listing != null) {
+            listing.setStatus(status);
+            return listingRepository.save(listing);
+        }
+        return null;
+    }
 }
