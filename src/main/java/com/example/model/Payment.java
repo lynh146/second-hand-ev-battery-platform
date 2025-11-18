@@ -1,16 +1,16 @@
 package com.example.model;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "PAYMENT")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-@Table(name = "PAYMENT")
 public class Payment {
 
     @Id
@@ -18,10 +18,13 @@ public class Payment {
     @Column(name = "PaymentID")
     private Long paymentID;
 
-    // GIỮ NGUYÊN: Khóa ngoại TransactionID (Đúng theo sơ đồ ERD)
     @ManyToOne
-    @JoinColumn(name = "TransactionID", nullable = false)
-    private Transaction transaction;
+    @JoinColumn(name = "UserID", nullable = false)
+    private User user;          
+
+    @ManyToOne
+    @JoinColumn(name = "ListingID", nullable = false)
+    private Listing listing;    
 
     @Column(name = "Amount", precision = 10, scale = 2)
     private BigDecimal amount;
@@ -33,21 +36,9 @@ public class Payment {
     private LocalDateTime paymentDate;
 
     @Column(name = "Status")
-    private String status;
+    private String status;      
 
-
-    @Column(name = "CommissionFee", precision = 10, scale = 2)  
-    private BigDecimal commissionFee;
-
-   
-    @Column(name = "PaymentGatewayRef")  
-    private String paymentGatewayRef;
-
-    @Column(name = "GatewayTransactionID")  
-    private String gatewayTransactionID;
-
-    @Column(name = "GatewayResponseCode")  
-    private String gatewayResponseCode;
-    
-    @Column(name = "SecureHash")  
+ 
+    @Column(name = "CommissionFee", precision = 10, scale = 2)
+    private BigDecimal commissionFee;  
 }
