@@ -1,22 +1,15 @@
 package com.example.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import java.math.BigDecimal;
 
+@Entity
+@Table(name = "BATTERY")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-@Table(name = "BATTERY")
 public class Battery {
 
     @Id
@@ -24,17 +17,24 @@ public class Battery {
     @Column(name = "BatteryID")
     private Long batteryID;
 
+    @ManyToOne
+    @JoinColumn(name = "OwnerID", nullable = false)
+    private User owner;
+
     @Column(name = "Brand")
     private String brand;
 
-    @Column(name = "Capacity")
-    private int capacity; // đơn vị: kWh
+    @Column(name = "Capacity_kWh", precision = 10, scale = 2)
+    private BigDecimal capacityKWh;
 
-    @Column(name = "Voltage")
-    private double voltage;
+    @Column(name = "BatteryCondition")
+    private String batteryCondition; 
 
-    @Column(name = "Condition")
-    private String condition; // Mới, cũ, đã qua sử dụng
+    @Column(name = "Description")
+    private String description;
+
+    @Column(name = "Price", precision = 10, scale = 2)
+    private BigDecimal price;
 
     @Column(name = "Status")
     private String status;
