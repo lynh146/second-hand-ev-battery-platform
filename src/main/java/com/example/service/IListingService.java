@@ -12,6 +12,5 @@ public interface IListingService {
 
     List<Listing> findAll();
 
-
+    
     Listing findById(Long id);
-}
