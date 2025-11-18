@@ -35,13 +35,5 @@ public class ListingSearchService implements IListingService {
         String k = (keyword == null) ? "" : keyword;
         return repo.findByApprovedTrueAndStatusAndTitleContainingIgnoreCase("PUBLIC", k);
     }
-    @Override
-    @Transactional(readOnly = true)
-    public List<Listing> featured(int limit) {
-        var p = org.springframework.data.domain.PageRequest.of(
-                0, Math.max(1, limit),
-                org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "createdAt")
-        );
-        return repo.findByApprovedTrueAndStatus("PUBLIC", p).getContent();
-    }
+
 }

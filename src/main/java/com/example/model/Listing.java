@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "LISTING")
+@Table(name = "Listing")
 public class Listing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,4 +38,3 @@ public class Listing {
     @JoinColumn(name = "approvedBy")
     private Admin approvedBy;
 }
-

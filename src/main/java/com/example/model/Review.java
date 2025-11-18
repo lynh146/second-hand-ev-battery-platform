@@ -1,15 +1,26 @@
 package com.example.model;
 
-import jakarta.persistence.*;
-import lombok.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "REVIEW")
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "REVIEW")
 public class Review {
 
     @Id
@@ -18,15 +29,15 @@ public class Review {
     private Long reviewID;
 
     @ManyToOne
-    @JoinColumn(name = "ReviewerID", nullable = false)
-    private User reviewer;
+    @JoinColumn(name = "UserID")
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "TransactionID", nullable = false)
-    private Transaction transaction;
+    @JoinColumn(name = "ListingID")
+    private Listing listing;
 
     @Column(name = "Rating")
-    private int rating;
+    private int rating; // ví dụ: 1-5 sao
 
     @Column(name = "Comment", length = 1000)
     private String comment;

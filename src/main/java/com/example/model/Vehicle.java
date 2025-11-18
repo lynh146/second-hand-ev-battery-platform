@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "VEHICLE")
+@Table(name = "Vehicle")
 public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,4 +15,3 @@ public class Vehicle {
     private String model;
     private int year;
 }
-
