@@ -1,12 +1,12 @@
-package com.example.Config;
+package com.example.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;  
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import lombok.Data;
 
 @Configuration
 @Data
-@ConfigurationProperties(prefix = "momo")  
+@ConfigurationProperties(prefix = "momo") 
 public class MoMoConfig {
 
     private String partnerCode; 
