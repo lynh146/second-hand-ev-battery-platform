@@ -1,5 +1,4 @@
- 
-package com.example.controller;
+ package com.example.controller;
 
 import com.example.service.IPaymentService;
 import com.example.service.ITransactionService;
@@ -19,7 +18,7 @@ public class PaymentProcessController {
     private final IPaymentService paymentService;
     private final MoMoService moMoService;
 
-     ng
+     
     @PostMapping("/payment/confirm")
     public String confirmPayment(
             @RequestParam Long listingId,
@@ -38,7 +37,7 @@ public class PaymentProcessController {
             
             Long transactionId = transactionService.createTransaction(listingId, buyerId, totalAmount);
 
-             ó
+             
             Long paymentId = paymentService.createPaymentRecord(
                     transactionId,
                     totalAmount,

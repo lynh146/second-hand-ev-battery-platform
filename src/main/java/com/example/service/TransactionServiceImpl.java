@@ -1,4 +1,4 @@
-package com.example.service.impl;
+package com.example.service;
 
 import com.example.model.Transaction;
 import com.example.model.User; 
@@ -33,7 +33,7 @@ public class TransactionServiceImpl implements ITransactionService {
                 .orElseThrow(() -> new RuntimeException("Listing not found: " + listingId));
         Transaction tx = Transaction.builder()
                 .buyer(buyer)
-                .seller(listing.getUser())   // nếu muốn lưu seller
+                .seller(listing.getUser())    
                 .listing(listing)
                 .totalAmount(totalAmount)
                 .createdAt(LocalDateTime.now())
