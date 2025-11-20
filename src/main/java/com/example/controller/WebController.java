@@ -73,6 +73,6 @@ public class WebController {
 
         model.addAttribute("paymentId", orderId);
         model.addAttribute("result", result.toUpperCase());
-        return "payment_status"; 
+        return "payment_status";
     }
 }
