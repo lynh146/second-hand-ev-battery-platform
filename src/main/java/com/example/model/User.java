@@ -18,8 +18,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
-@Table(name = "USER") 
+@Table(name = "USER")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -43,7 +46,7 @@ public class User {
     private String address;
 
     @Column(name = "Role")
-    private String role;
+    private String role;  
 
     @Column(name = "RegisterDate")
     private LocalDateTime registerDate;
