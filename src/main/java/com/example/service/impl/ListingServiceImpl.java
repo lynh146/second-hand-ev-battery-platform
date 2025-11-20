@@ -62,3 +62,37 @@ public class ListingServiceImpl implements IListingService {
     public void deleteListing(Long id) {
         listingRepository.deleteById(id);
     }
+
+    //Search & Guest 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Listing> searchListing(String keyword) {
+        String k = (keyword == null) ? "" : keyword.trim();
+        if (k.isEmpty()) {
+            Pageable p = PageRequest.of(
+                    0, 20,
+                    Sort.by(Sort.Direction.DESC, "createdAt")
+            );
+            return listingRepository.findByStatus("PUBLIC", p).getContent();
+        }
+        return listingRepository.findByStatusAndTitleContainingIgnoreCase("PUBLIC", k);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Listing> featured(int limit) {
+        Pageable p = PageRequest.of(
+                0,
+                Math.max(1, limit),
+                Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+        return listingRepository.findByStatus("PUBLIC", p).getContent();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Listing getPublicDetail(Long id) {
+        return listingRepository.findByListingIDAndStatus(id, "PUBLIC");
+    }
+
+}
