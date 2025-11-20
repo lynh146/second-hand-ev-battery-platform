@@ -1,0 +1,16 @@
+.search-page {
+    max-width: 960px;
+}
+
+.search-bar .form-control {
+    border-radius: 999px;
+    padding-inline: 1.2rem;
+}
+
+.result-item .result-thumbnail {
+    width: 120px;
+    min-width: 120px;
+    height: 90px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #38bdf8, #6366f1);
+}

@@ -44,17 +44,17 @@ public class UserController {
     }
 
     @PostMapping("/login")
-public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
-    String email = body.get("email");
-    String password = body.get("password");
-    User loggedIn = userService.loginUser(email, password);
-
-    if (loggedIn == null) {
-        return ResponseEntity.status(401).body(Map.of("message", "Sai email hoặc mật khẩu"));
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
+        try {
+            User loggedIn = userService.loginUser(email, password);
+            return ResponseEntity.ok(Map.of("message", "Đăng nhập thành công", "user", loggedIn));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(401)
+                    .body(Map.of("message", ex.getMessage()));
+        }
     }
-    return ResponseEntity.ok(Map.of("message", "Đăng nhập thành công", "user", loggedIn));
-}
-
 
     @PutMapping("/{id}")
     public Map<String, Object> updateUser(@PathVariable Long id, @RequestBody User user) {
