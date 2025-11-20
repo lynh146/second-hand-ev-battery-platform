@@ -34,17 +34,17 @@ public class PaymentServiceImpl implements IPaymentService {
 
         BigDecimal commissionFee = calculateCommission(totalAmount);
         
-        // LƯU Ý: Entity Payment CŨ chỉ có User và Listing
+        
         Payment newPayment = Payment.builder()
-                .user(transaction.getBuyer()) // Lấy Buyer từ Transaction
-                .listing(transaction.getListing()) // Lấy Listing từ Transaction
+                .user(transaction.getBuyer())  
+                .listing(transaction.getListing()) 
                 .amount(totalAmount)
                 .paymentMethod(paymentMethod)
                 .commissionFee(commissionFee)
                 .status("INITIATED")
                 .build();
         
-        // Trường PaymentID được sử dụng làm OrderID cho MoMo
+         
         return paymentRepository.save(newPayment).getPaymentID();
     }
     
@@ -56,7 +56,7 @@ public class PaymentServiceImpl implements IPaymentService {
         Payment payment = paymentRepository.findById(paymentId)
             .orElseThrow(() -> new RuntimeException("Payment not found."));
 
-        // Cập nhật các trường GATEWAY: Giả định các setter này tồn tại trong Payment.java
+        
         payment.setStatus("PAID");
         payment.setPaymentDate(LocalDateTime.now());
         payment.setPaymentGatewayRef(orderId); 
@@ -66,8 +66,7 @@ public class PaymentServiceImpl implements IPaymentService {
 
         paymentRepository.save(payment);
         
-        // Cập nhật trạng thái Transaction: Phải tìm lại Transaction bằng phương pháp khác
-        // (RỦI RO: Giả định PaymentID (orderId) khớp với TransactionID để tìm lại Transaction)
+   
         Transaction transaction = transactionRepository.findById(Long.parseLong(orderId))
              .orElseThrow(() -> new RuntimeException("Transaction not found for ID: " + orderId));
         transaction.setStatus("SUCCESS");
@@ -89,14 +88,14 @@ public class PaymentServiceImpl implements IPaymentService {
         
         paymentRepository.save(payment);
         
-        // Cập nhật trạng thái Transaction: Phải tìm lại Transaction thủ công
+        
         Transaction transaction = transactionRepository.findById(Long.parseLong(orderId))
             .orElseThrow(() -> new RuntimeException("Transaction not found for ID: " + orderId));
         transaction.setStatus("FAILED");
         transactionRepository.save(transaction);
     }
  
-    // --- TRIỂN KHAI CÁC PHƯƠNG THỨC TRUY VẤN MỚI ---
+    -
     @Override
     public List<Payment> getAllPayments() {
         return paymentRepository.findAll();
@@ -119,7 +118,7 @@ public class PaymentServiceImpl implements IPaymentService {
     
     @Override
     public List<Payment> getPaymentsByTransactionId(Long transactionId) {
-        // HÀM NÀY SỬ DỤNG PHƯƠNG THỨC MỚI TRONG REPOSITORY
+         
         return paymentRepository.findByTransaction_TransactionID(transactionId);
     }
 }
