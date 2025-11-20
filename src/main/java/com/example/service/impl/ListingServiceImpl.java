@@ -23,7 +23,6 @@ public class ListingServiceImpl implements IListingService {
 
     private final ListingRepository listingRepository;
 
-    // ===== Đạt – CRUD tin đăng cho seller =====
     @Override
     public Listing createListing(Listing listing) {
         if (listing.getCreatedAt() == null) {
@@ -66,7 +65,7 @@ public class ListingServiceImpl implements IListingService {
         listingRepository.deleteById(id);
     }
 
-    // ===== Linh – Search & Guest =====
+
     @Override
     @Transactional(readOnly = true)
     public List<Listing> searchListing(String keyword) {
@@ -99,7 +98,7 @@ public class ListingServiceImpl implements IListingService {
         return listingRepository.findByListingIDAndStatus(id, "PUBLIC");
     }
 
-    // ===== Thắng – Admin duyệt tin =====
+   
     @Override
     @Transactional(readOnly = true)
     public List<Listing> getPendingListings() {
@@ -120,3 +119,4 @@ public class ListingServiceImpl implements IListingService {
         return listingRepository.save(listing);
     }
 }
+
