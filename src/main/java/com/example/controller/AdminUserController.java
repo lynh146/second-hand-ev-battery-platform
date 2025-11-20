@@ -18,7 +18,6 @@ public class AdminUserController {
         this.userService = userService;
     }
 
-    // Hiển thị danh sách người dùng
     @GetMapping
     public String viewUsers(Model model) {
         List<User> users = userService.findAll();
@@ -26,7 +25,7 @@ public class AdminUserController {
         return "admin_users";
     }
 
-    // Hiển thị form cập nhật
+    
     @GetMapping("/edit/{id}")
     public String editUserForm(@PathVariable Long id, Model model) {
         User user = userService.findById(id);
@@ -37,7 +36,6 @@ public class AdminUserController {
         return "redirect:/admin/users";
     }
 
-    // Lưu cập nhật
     @PostMapping("/update")
     public String updateUser(@ModelAttribute User user) {
         userService.update(user);
