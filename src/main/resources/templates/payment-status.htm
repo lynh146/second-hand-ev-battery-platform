@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Kết quả Thanh toán MoMo</title>
+  </head>
+  <body>
+    <h1 th:if="${result == 'SUCCESS'}" style="color: green">
+      ✅ Giao dịch Thành công!
+    </h1>
+    <h1 th:if="${result == 'FAILURE'}" style="color: red">
+      ❌ Giao dịch Thất bại!
+    </h1>
+    <h1 th:if="${result == 'ERROR'}" style="color: orange">⚠️ Lỗi Xử lý!</h1>
+
+    <p>Mã Thanh toán (Payment ID): <strong th:text="${paymentId}"></strong></p>
+    <p>Trạng thái: <strong th:text="${result}"></strong></p>
+
+    <hr />
+    <a href="/transaction/history">Quay lại Lịch sử Giao dịch</a>
+  </body>
+</html>

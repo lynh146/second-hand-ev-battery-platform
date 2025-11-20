@@ -10,7 +10,7 @@
       <h2>Thanh toán</h2>
 
       <div class="payment-item">
-        <p>Sản phẩm: <strong th:text="${item.name}"></strong></p>
+        <p>Sản phẩm: <strong th:text="${item.name}">[Tên sản phẩm]</strong></p>
         <p>
           Giá:
           <span th:text="${#numbers.formatInteger(item.price, 0)} + 'đ'"></span>
@@ -28,13 +28,16 @@
         </p>
       </div>
 
-      <form>
+      <form method="POST" th:action="@{/payment/confirm}">
+        <input type="hidden" name="listingId" th:value="${item.listingID}" />
+        <input type="hidden" name="totalAmount" th:value="${total}" />
+
         <label>Phương thức thanh toán:</label>
-        <select required>
-          <option value="momo">Momo</option>
-          <option value="bank">Ngân hàng</option>
+        <select name="paymentMethod" required>
+          <option value="MOMO">Momo</option>
+          <option value="BANK">Ngân hàng</option>
         </select>
-        <button class="btn-confirm">Xác nhận thanh toán</button>
+        <button class="btn-confirm" type="submit">Xác nhận thanh toán</button>
       </form>
     </div>
   </body>
