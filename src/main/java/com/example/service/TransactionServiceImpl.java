@@ -1,9 +1,13 @@
-package com.example.service;
+package com.example.service.impl;
 
 import com.example.model.Transaction;
 import com.example.model.User; 
-import com.example.model.Listing;  
+import com.example.model.Listing;
+import com.example.repository.ListingRepository;
 import com.example.repository.TransactionRepository;
+import com.example.repository.UserRepository;
+import com.example.service.ITransactionService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +21,25 @@ import java.util.Optional;
 public class TransactionServiceImpl implements ITransactionService {
 
     private final TransactionRepository transactionRepository;
-     
+    private final UserRepository userRepository;
+    private final ListingRepository listingRepository;
 
     @Override
     public Long createTransaction(Long listingId, Long buyerId, BigDecimal totalAmount) {
         
+        User buyer = userRepository.findById(buyerId)
+                .orElseThrow(() -> new RuntimeException("Buyer not found: " + buyerId));
+        Listing listing = listingRepository.findById(listingId)
+                .orElseThrow(() -> new RuntimeException("Listing not found: " + listingId));
         Transaction tx = Transaction.builder()
+                .buyer(buyer)
+                .seller(listing.getUser())   // nếu muốn lưu seller
+                .listing(listing)
                 .totalAmount(totalAmount)
                 .createdAt(LocalDateTime.now())
-                .status("INITIATED") 
-              
+                .status("INITIATED")
                 .build();
+
         
         tx = transactionRepository.save(tx);
         return tx.getTransactionID();
