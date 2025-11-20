@@ -28,17 +28,17 @@ public class AdminReportController {
     @GetMapping
     public String reportPage(Model model) {
 
-        // --- Thống kê user & listing ---
+       
         long totalUsers      = userRepository.count();
         long totalListings   = listingRepository.count();
         long pendingListings = listingRepository.findByStatus("PENDING").size();
         long publicListings  = listingRepository.findByStatus("PUBLIC").size();
 
-        // --- Thống kê giao dịch ---
+       
         long totalTransactions   = transactionRepository.count();
         long successTransactions = transactionRepository.countByStatus("SUCCESS");
 
-        // --- Doanh thu và phí nền tảng (từ Payment đã SUCCESS) ---
+        
         List<Payment> successPayments = paymentRepository.findByStatus("SUCCESS");
 
         BigDecimal totalRevenue = successPayments.stream()
@@ -51,7 +51,7 @@ public class AdminReportController {
                 .filter(a -> a != null)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // Đẩy dữ liệu ra view
+     
         model.addAttribute("totalUsers", totalUsers);
         model.addAttribute("totalListings", totalListings);
         model.addAttribute("pendingListings", pendingListings);
