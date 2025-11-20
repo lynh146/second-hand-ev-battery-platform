@@ -1,9 +1,13 @@
-package com.example.service;
+ 
+package com.example.service.impl;
 
+import com.example.model.Listing;
 import com.example.model.Payment;
 import com.example.model.Transaction;
+import com.example.model.User;
 import com.example.repository.PaymentRepository;
 import com.example.repository.TransactionRepository;
+import com.example.service.IPaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,94 +20,114 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PaymentServiceImpl implements IPaymentService {
 
     private final PaymentRepository paymentRepository;
-    private final TransactionRepository transactionRepository; 
+    private final TransactionRepository transactionRepository;
+
     private static final BigDecimal PLATFORM_FEE_RATE = BigDecimal.valueOf(0.05);
 
-    private BigDecimal calculateCommission(BigDecimal amount) {
+    private BigDecimal calcFee(BigDecimal amount) {
+        if (amount == null) return BigDecimal.ZERO;
         return amount.multiply(PLATFORM_FEE_RATE);
     }
- 
-    @Override
-    @Transactional
-    public Long createPaymentRecord(Long transactionId, BigDecimal totalAmount, String paymentMethod) {
-        Transaction transaction = transactionRepository.findById(transactionId)
-            .orElseThrow(() -> new RuntimeException("Transaction not found."));
 
-        BigDecimal commissionFee = calculateCommission(totalAmount);
-        
-        
-        Payment newPayment = Payment.builder()
-                .user(transaction.getBuyer())  
-                .listing(transaction.getListing()) 
+     
+    @Override
+    public Long createPaymentRecord(Long transactionId,
+                                    BigDecimal totalAmount,
+                                    String paymentMethod) {
+
+        Transaction tx = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new RuntimeException("Transaction not found: " + transactionId));
+
+        User buyer   = tx.getBuyer();
+        Listing listing = tx.getListing();
+
+        Payment payment = Payment.builder()
+                .user(buyer)
+                .listing(listing)
                 .amount(totalAmount)
                 .paymentMethod(paymentMethod)
-                .commissionFee(commissionFee)
-                .status("INITIATED")
+                .status("PENDING")          // đang chờ MoMo
+                .commissionFee(calcFee(totalAmount))
                 .build();
+
+        payment = paymentRepository.save(payment);
+
         
-         
-        return paymentRepository.save(newPayment).getPaymentID();
+        tx.setPayment(payment);
+        tx.setStatus("PENDING");
+        transactionRepository.save(tx);
+
+        return payment.getPaymentID();
     }
+
     
     @Override
-    @Transactional
     public void processMomoSuccess(String orderId, Map<String, Object> momoResponse) {
-       
         Long paymentId = Long.parseLong(orderId);
+
         Payment payment = paymentRepository.findById(paymentId)
-            .orElseThrow(() -> new RuntimeException("Payment not found."));
+                .orElseThrow(() -> new RuntimeException("Payment not found: " + paymentId));
 
-        
-        payment.setStatus("PAID");
+        payment.setStatus("SUCCESS");
         payment.setPaymentDate(LocalDateTime.now());
-        payment.setPaymentGatewayRef(orderId); 
-        payment.setGatewayTransactionID(String.valueOf(momoResponse.get("transId")));
-        payment.setGatewayResponseCode(String.valueOf(momoResponse.get("resultCode")));
-        payment.setSecureHash((String) momoResponse.get("signature")); 
-
         paymentRepository.save(payment);
-        
-   
-        Transaction transaction = transactionRepository.findById(Long.parseLong(orderId))
-             .orElseThrow(() -> new RuntimeException("Transaction not found for ID: " + orderId));
-        transaction.setStatus("SUCCESS");
-        transactionRepository.save(transaction);
+
+        Transaction tx = transactionRepository
+                .findByPayment_PaymentID(paymentId)
+                .orElse(null);
+
+        if (tx != null) {
+            tx.setStatus("SUCCESS");
+            transactionRepository.save(tx);
+        }
     }
+
     
     @Override
-    @Transactional
     public void processMomoFailure(String orderId, Map<String, Object> momoResponse) {
-      
         Long paymentId = Long.parseLong(orderId);
+
         Payment payment = paymentRepository.findById(paymentId)
-            .orElseThrow(() -> new RuntimeException("Payment not found."));
-        
+                .orElseThrow(() -> new RuntimeException("Payment not found: " + paymentId));
+
         payment.setStatus("FAILED");
         payment.setPaymentDate(LocalDateTime.now());
-        payment.setPaymentGatewayRef(orderId);
-        payment.setGatewayResponseCode(String.valueOf(momoResponse.get("resultCode")));
-        
         paymentRepository.save(payment);
-        
-        
-        Transaction transaction = transactionRepository.findById(Long.parseLong(orderId))
-            .orElseThrow(() -> new RuntimeException("Transaction not found for ID: " + orderId));
-        transaction.setStatus("FAILED");
-        transactionRepository.save(transaction);
+
+        Transaction tx = transactionRepository.findByPayment_PaymentID(paymentId).orElse(null);
+        if (tx != null) {
+            tx.setStatus("FAILED");
+            transactionRepository.save(tx);
+        }
     }
- 
-    -
+
+     
     @Override
+    @Transactional(readOnly = true)
     public List<Payment> getAllPayments() {
         return paymentRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Payment> getPaymentById(Long id) {
         return paymentRepository.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Payment> getPaymentsByUser(Long userId) {
+        return paymentRepository.findByUser_UserID(userId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Payment> getPaymentsByListing(Long listingId) {
+        return paymentRepository.findByListing_ListingID(listingId);
     }
 
     @Override
@@ -114,11 +138,5 @@ public class PaymentServiceImpl implements IPaymentService {
     @Override
     public void deletePayment(Long id) {
         paymentRepository.deleteById(id);
-    }
-    
-    @Override
-    public List<Payment> getPaymentsByTransactionId(Long transactionId) {
-         
-        return paymentRepository.findByTransaction_TransactionID(transactionId);
     }
 }

@@ -20,11 +20,11 @@ public class Payment {
 
     @ManyToOne
     @JoinColumn(name = "UserID", nullable = false)
-    private User user;          
+    private User user;           
 
     @ManyToOne
     @JoinColumn(name = "ListingID", nullable = false)
-    private Listing listing;    
+    private Listing listing;     
 
     @Column(name = "Amount", precision = 10, scale = 2)
     private BigDecimal amount;
@@ -36,9 +36,8 @@ public class Payment {
     private LocalDateTime paymentDate;
 
     @Column(name = "Status")
-    private String status;      
+    private String status;   .
 
- 
     @Column(name = "CommissionFee", precision = 10, scale = 2)
-    private BigDecimal commissionFee;
+    private BigDecimal commissionFee;  
 }

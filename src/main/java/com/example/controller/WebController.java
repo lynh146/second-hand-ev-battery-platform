@@ -1,3 +1,4 @@
+ 
 package com.example.controller;
 
 import com.example.model.Transaction;
@@ -19,7 +20,7 @@ public class WebController {
     private final ITransactionService transactionService;
     private static final BigDecimal PLATFORM_FEE_RATE = BigDecimal.valueOf(0.05);
 
-     
+    // tạm mock Listing cho demo
     private static class ListingMock {
         private Long listingID = 1L;
         private String name = "Xe điện PinFast VF-X";
@@ -45,14 +46,14 @@ public class WebController {
         model.addAttribute("fee", fee);
         model.addAttribute("total", total);
 
-        return "payment";  
+        return "payment"; 
     }
 
     @GetMapping("/transaction/history")
     public String showTransactionHistory(Model model) {
         List<Transaction> transactions = transactionService.getAllTransactions();
         model.addAttribute("transactions", transactions);
-        return "transaction_history"; 
+        return "transaction_history";  
     }
 
     @GetMapping("/transaction/detail")
@@ -63,7 +64,7 @@ public class WebController {
             return "error/404";
         }
         model.addAttribute("transaction", optionalTx.get());
-        return "transaction_detail";  
+        return "transaction_detail"; 
     }
 
     @GetMapping("/payment/status")
@@ -73,6 +74,6 @@ public class WebController {
 
         model.addAttribute("paymentId", orderId);
         model.addAttribute("result", result.toUpperCase());
-        return "payment_status";
+        return "payment_status";  
     }
 }

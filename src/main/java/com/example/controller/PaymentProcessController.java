@@ -1,3 +1,4 @@
+ 
 package com.example.controller;
 
 import com.example.service.IPaymentService;
@@ -14,46 +15,48 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class PaymentProcessController {
 
-    private final ITransactionService transactionService; 
-    private final IPaymentService paymentService;         
-    private final MoMoService moMoService;             
+    private final ITransactionService transactionService;
+    private final IPaymentService paymentService;
+    private final MoMoService moMoService;
 
-     
-    @PostMapping("/payment/confirm") 
+     ng
+    @PostMapping("/payment/confirm")
     public String confirmPayment(
-        @RequestParam Long listingId,
-        @RequestParam BigDecimal totalAmount,
-        @RequestParam String paymentMethod
+            @RequestParam Long listingId,
+            @RequestParam BigDecimal totalAmount,
+            @RequestParam String paymentMethod
     ) {
+       
         if (!"MOMO".equalsIgnoreCase(paymentMethod)) {
             return "redirect:/payment/status?orderId=0&result=ERROR&message=Method_Not_Supported";
         }
-        
+
         try {
              
-            Long buyerId = 1L; 
-             
+            Long buyerId = 1L;
+
+            
             Long transactionId = transactionService.createTransaction(listingId, buyerId, totalAmount);
-             
+
+             ó
             Long paymentId = paymentService.createPaymentRecord(
-                transactionId, 
-                totalAmount, 
-                paymentMethod 
+                    transactionId,
+                    totalAmount,
+                    paymentMethod
             );
-            
+
              
-            long momoAmount = totalAmount.longValue(); 
-            
+            long momoAmount = totalAmount.longValue();
+
             String payUrl = moMoService.createPaymentRequest(
-                momoAmount, 
-                "Thanh toan giao dich " + transactionId,
-                paymentId 
+                    momoAmount,
+                    "Thanh toan giao dich " + transactionId,
+                    paymentId
             );
-            
-            return "redirect:" + payUrl;  
-            
+
+            return "redirect:" + payUrl;
+
         } catch (Exception e) {
-          
             return "redirect:/payment/status?orderId=0&result=ERROR&message=" + e.getMessage();
         }
     }
