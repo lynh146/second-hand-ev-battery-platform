@@ -24,7 +24,7 @@ public class UserViewController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("user", new User());
-        return "user-form";  // Diễn: form đăng ký cho admin tạo user
+        return "user-form"; 
     }
 
     @PostMapping("/new")
@@ -33,7 +33,7 @@ public class UserViewController {
             RedirectAttributes redirectAttributes
     ) {
         if (user.getRole() == null || user.getRole().isBlank()) {
-            user.setRole("MEMBER");   // đặt role mặc định
+            user.setRole("MEMBER");  
         }
         if (user.getStatus() == null || user.getStatus().isBlank()) {
             user.setStatus("ACTIVE");
