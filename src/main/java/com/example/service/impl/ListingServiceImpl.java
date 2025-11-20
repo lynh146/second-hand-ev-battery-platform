@@ -71,7 +71,7 @@ public class ListingServiceImpl implements IListingService {
     public List<Listing> searchListing(String keyword) {
         String k = (keyword == null) ? "" : keyword.trim();
         if (k.isEmpty()) {
-            // nếu không có keyword thì trả về vài tin PUBLIC mới nhất
+           
             Pageable p = PageRequest.of(
                     0, 20,
                     Sort.by(Sort.Direction.DESC, "createdAt")
@@ -102,7 +102,7 @@ public class ListingServiceImpl implements IListingService {
     @Override
     @Transactional(readOnly = true)
     public List<Listing> getPendingListings() {
-        // status = PENDING và chưa có admin duyệt
+      
         return listingRepository.findByStatusAndApprovedByIsNull("PENDING");
     }
 
@@ -119,4 +119,5 @@ public class ListingServiceImpl implements IListingService {
         return listingRepository.save(listing);
     }
 }
+
 
