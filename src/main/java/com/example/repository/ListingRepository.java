@@ -21,5 +21,10 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
     List<Listing> findByApprovedTrueAndStatusAndTitleContainingIgnoreCase(String status, String keyword);
 
     Page<Listing> findByApprovedTrueAndStatus(String status, org.springframework.data.domain.Pageable pageable);
+
+    List<Listing> findByStatusAndApprovedByIsNull(String status);
+
+    List<Listing> findByApprovedBy(Admin admin);
+
 }
 
