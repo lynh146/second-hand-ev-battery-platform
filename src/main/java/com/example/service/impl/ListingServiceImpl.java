@@ -5,10 +5,10 @@ import com.example.model.Listing;
 import com.example.repository.ListingRepository;
 import com.example.service.IListingService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +16,17 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@Primary 
+@Primary
 @RequiredArgsConstructor
 @Transactional
 public class ListingServiceImpl implements IListingService {
 
     private final ListingRepository listingRepository;
-
     @Override
     public Listing createListing(Listing listing) {
-        listing.setCreatedAt(LocalDateTime.now());
+        if (listing.getCreatedAt() == null) {
+            listing.setCreatedAt(LocalDateTime.now());
+        }
         if (listing.getStatus() == null) {
             listing.setStatus("PENDING");
         }
@@ -42,5 +43,22 @@ public class ListingServiceImpl implements IListingService {
     @Transactional(readOnly = true)
     public Listing findById(Long id) {
         return listingRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Listing not found with id = " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Listing not found: " + id));
+    }
+
+    @Override
+    public Listing updateListing(Long id, Listing updated) {
+        Listing existing = findById(id);
+        existing.setTitle(updated.getTitle());
+        existing.setDescription(updated.getDescription());
+        existing.setPrice(updated.getPrice());
+        existing.setVehicle(updated.getVehicle());
+        existing.setBattery(updated.getBattery());
+        existing.setStatus(updated.getStatus());
+        return listingRepository.save(existing);
+    }
+
+    @Override
+    public void deleteListing(Long id) {
+        listingRepository.deleteById(id);
     }
