@@ -95,4 +95,25 @@ public class ListingServiceImpl implements IListingService {
         return listingRepository.findByListingIDAndStatus(id, "PUBLIC");
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Listing> getPendingListings() {
+        // status = PENDING và chưa có admin duyệt
+        return listingRepository.findByStatusAndApprovedByIsNull("PENDING");
+    }
+
+    @Override
+    public Listing approveListing(Long id, Admin admin, boolean approved) {
+        Listing listing = findById(id);
+        if (approved) {
+            listing.setStatus("PUBLIC");
+            listing.setApprovedBy(admin);
+        } else {
+            listing.setStatus("REJECTED");
+            listing.setApprovedBy(null);
+        }
+        return listingRepository.save(listing);
+    }
+
+
 }
