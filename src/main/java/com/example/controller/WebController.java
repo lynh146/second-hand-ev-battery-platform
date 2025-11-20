@@ -1,16 +1,18 @@
 package com.example.controller;
 
-import com.example.model.Transaction;
-import com.example.service.ITransactionService;
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
+import com.example.model.Transaction;
+import com.example.service.ITransactionService;
+
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -50,11 +52,9 @@ public class WebController {
     public String showTransactionHistory(Model model) {
         List<Transaction> transactions = transactionService.getAllTransactions(); 
         model.addAttribute("transactions", transactions);
-        // SỬA: TRẢ VỀ TÊN FILE CÓ HẬU TỐ CHÍNH XÁC
         return "transaction_history.html"; 
     }
-    
-    // 3. Hiển thị Chi tiết Giao dịch (transaction_detail.htm)
+
     @GetMapping("/transaction/detail")
     public String showTransactionDetail(@RequestParam Long id, Model model) {
         Optional<Transaction> optionalTx = transactionService.getTransactionById(id);
