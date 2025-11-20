@@ -1,4 +1,3 @@
-// Module 5: Admin & Report Manager – Thắng
 package com.example.controller;
 
 import com.example.model.Payment;
