@@ -23,7 +23,6 @@ public class AdminListingController {
     private final NotificationRepository notificationRepository;
     private final AdminRepository adminRepository;
 
-    // Hiển thị danh sách tin PENDING chờ duyệt
     @GetMapping("/pending")
     public String viewPendingListings(Model model) {
         model.addAttribute("pendingListings", listingService.getPendingListings());
@@ -41,7 +40,7 @@ public class AdminListingController {
 
         Listing listing = listingService.approveListing(id, admin, true);
 
-        // Tạo Notification cho chủ tin đăng
+       
         if (listing.getUser() != null) {
             Notification noti = Notification.builder()
                     .user(listing.getUser())
@@ -58,7 +57,7 @@ public class AdminListingController {
         return "redirect:/admin/listings/pending";
     }
 
-    // Admin từ chối tin (Reject)
+   
     @PostMapping("/{id}/reject")
     public String rejectListing(@PathVariable Long id,
                                 @RequestParam(name = "reason", required = false) String reason,
