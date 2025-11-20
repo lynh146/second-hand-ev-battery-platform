@@ -4,28 +4,35 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "NOTIFICATION")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-@Table(name = "NOTIFICATION")
 public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String message;
-
-    @Column(nullable = false)
-    private boolean isRead;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "NotificationID")
+    private Long notificationID;
 
     @ManyToOne
     @JoinColumn(name = "UserID", nullable = false)
     private User user;
+
+    @Column(name = "Title")
+    private String title;
+
+    @Column(name = "Message")
+    private String message;
+
+    @Column(name = "Type")
+    private String type;
+
+    @Column(name = "CreatedAt")
+    private LocalDateTime createdAt;
+
+    @Column(name = "IsRead")
+    private Boolean isRead;
 }
