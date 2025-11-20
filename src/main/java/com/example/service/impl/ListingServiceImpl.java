@@ -22,14 +22,13 @@ import java.util.List;
 public class ListingServiceImpl implements IListingService {
 
     private final ListingRepository listingRepository;
-
     @Override
     public Listing createListing(Listing listing) {
         if (listing.getCreatedAt() == null) {
             listing.setCreatedAt(LocalDateTime.now());
         }
         if (listing.getStatus() == null) {
-            listing.setStatus("PENDING"); // mặc định chờ duyệt
+            listing.setStatus("PENDING");
         }
         return listingRepository.save(listing);
     }
@@ -56,7 +55,6 @@ public class ListingServiceImpl implements IListingService {
         existing.setVehicle(updated.getVehicle());
         existing.setBattery(updated.getBattery());
         existing.setStatus(updated.getStatus());
-        // ... các field khác nếu cần
         return listingRepository.save(existing);
     }
 
@@ -65,13 +63,12 @@ public class ListingServiceImpl implements IListingService {
         listingRepository.deleteById(id);
     }
 
-
+    //Search & Guest 
     @Override
     @Transactional(readOnly = true)
     public List<Listing> searchListing(String keyword) {
         String k = (keyword == null) ? "" : keyword.trim();
         if (k.isEmpty()) {
-           
             Pageable p = PageRequest.of(
                     0, 20,
                     Sort.by(Sort.Direction.DESC, "createdAt")
@@ -98,11 +95,10 @@ public class ListingServiceImpl implements IListingService {
         return listingRepository.findByListingIDAndStatus(id, "PUBLIC");
     }
 
-   
     @Override
     @Transactional(readOnly = true)
     public List<Listing> getPendingListings() {
-      
+        // status = PENDING và chưa có admin duyệt
         return listingRepository.findByStatusAndApprovedByIsNull("PENDING");
     }
 
@@ -118,6 +114,6 @@ public class ListingServiceImpl implements IListingService {
         }
         return listingRepository.save(listing);
     }
+
+
 }
-
-
