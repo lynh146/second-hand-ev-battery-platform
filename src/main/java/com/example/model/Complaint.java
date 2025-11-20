@@ -31,4 +31,13 @@ public class Complaint {
 
     @Column(name = "ProcessedAt")
     private LocalDateTime processedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "TransactionID", nullable = false)
+    private Transaction transaction;
+
+    
+    @ManyToOne
+    @JoinColumn(name = "UserID", nullable = false)
+    private User user;
 }
