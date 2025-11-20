@@ -40,5 +40,5 @@ public class Payment {
 
  
     @Column(name = "CommissionFee", precision = 10, scale = 2)
-    private BigDecimal commissionFee;  
+    private BigDecimal commissionFee;
 }
