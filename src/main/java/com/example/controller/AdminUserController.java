@@ -18,29 +18,26 @@ public class AdminUserController {
         this.userService = userService;
     }
 
-    // Hiển thị danh sách người dùng
     @GetMapping
     public String viewUsers(Model model) {
-        List<User> users = userService.findAll();
+        List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "admin_users";
     }
 
-    // Hiển thị form cập nhật
     @GetMapping("/edit/{id}")
     public String editUserForm(@PathVariable Long id, Model model) {
-        User user = userService.findById(id);
-        if (user != null) {
-            model.addAttribute("user", user);
-            return "admin_user_edit";
-        }
-        return "redirect:/admin/users";
+        return userService.getUserById(id)
+                .map(user -> {
+                    model.addAttribute("user", user);
+                    return "admin_user_edit";
+                })
+                .orElse("redirect:/admin/users");
     }
 
-    // Lưu cập nhật
     @PostMapping("/update")
     public String updateUser(@ModelAttribute User user) {
-        userService.update(user);
+        userService.updateUser(user.getUserID(), user);
         return "redirect:/admin/users";
     }
 }
