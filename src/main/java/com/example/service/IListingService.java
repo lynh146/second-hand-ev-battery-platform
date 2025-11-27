@@ -5,6 +5,8 @@ import com.example.model.Listing;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public interface IListingService {
 
     Listing createListing(Listing listing);
@@ -12,13 +14,15 @@ public interface IListingService {
     Listing findById(Long id);
     Listing updateListing(Long id, Listing listing);
     void deleteListing(Long id);
+    void uploadImages(Long listingId, List<MultipartFile> files);
 
-    //Search & Guest
-    List<Listing> searchListing(String keyword);   
-    List<Listing> featured(int limit);           
-    Listing getPublicDetail(Long id);  
+    List<Listing> searchListing(String keyword); 
+    List<Listing> featured(int limit);         
+    Listing getPublicDetail(Long id);           
 
-        List<Listing> getPendingListings();          
+    List<Listing> getPendingListings();     
     Listing approveListing(Long id, Admin admin, boolean approved);
+    
+    void deleteImage(Long id);
 
 }
