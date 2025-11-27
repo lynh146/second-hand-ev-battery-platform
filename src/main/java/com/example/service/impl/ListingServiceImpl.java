@@ -62,3 +62,58 @@ public class ListingServiceImpl implements IListingService {
     public void deleteListing(Long id) {
         listingRepository.deleteById(id);
     }
+
+    //Search & Guest 
+    @Override
+    @Transactional(readOnly = true)
+    public List<Listing> searchListing(String keyword) {
+        String k = (keyword == null) ? "" : keyword.trim();
+        if (k.isEmpty()) {
+            Pageable p = PageRequest.of(
+                    0, 20,
+                    Sort.by(Sort.Direction.DESC, "createdAt")
+            );
+            return listingRepository.findByStatus("PUBLIC", p).getContent();
+        }
+        return listingRepository.findByStatusAndTitleContainingIgnoreCase("PUBLIC", k);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Listing> featured(int limit) {
+        Pageable p = PageRequest.of(
+                0,
+                Math.max(1, limit),
+                Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+        return listingRepository.findByStatus("PUBLIC", p).getContent();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Listing getPublicDetail(Long id) {
+        return listingRepository.findByListingIDAndStatus(id, "PUBLIC");
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Listing> getPendingListings() {
+        // status = PENDING và chưa có admin duyệt
+        return listingRepository.findByStatusAndApprovedByIsNull("PENDING");
+    }
+
+    @Override
+    public Listing approveListing(Long id, Admin admin, boolean approved) {
+        Listing listing = findById(id);
+        if (approved) {
+            listing.setStatus("PUBLIC");
+            listing.setApprovedBy(admin);
+        } else {
+            listing.setStatus("REJECTED");
+            listing.setApprovedBy(null);
+        }
+        return listingRepository.save(listing);
+    }
+
+
+}

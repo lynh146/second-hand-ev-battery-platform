@@ -12,4 +12,13 @@ public interface IListingService {
     Listing findById(Long id);
     Listing updateListing(Long id, Listing listing);
     void deleteListing(Long id);
+
+    //Search & Guest
+    List<Listing> searchListing(String keyword);   
+    List<Listing> featured(int limit);           
+    Listing getPublicDetail(Long id);  
+
+        List<Listing> getPendingListings();          
+    Listing approveListing(Long id, Admin admin, boolean approved);
+
 }
