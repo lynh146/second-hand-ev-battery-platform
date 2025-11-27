@@ -1,65 +1,41 @@
-/* ===== Toàn trang ===== */
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(120deg, #f0f4f8, #d9e2ec);
+.locked-section input {
+    background: #f5f5f5 !important;
+    cursor: not-allowed;
 }
 
-/* ===== Navbar ===== */
-.navbar {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.image-preview-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-/* ===== Card Form ===== */
-form.card {
-  background-color: #ffffff;
-  border-radius: 15px;
-  padding: 30px;
-  max-width: 600px;
-  margin: auto;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s, box-shadow 0.3s;
+.preview-box {
+    width: 130px;
+    height: 130px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid #eee;
 }
 
-form.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+.preview-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* ===== Tiêu đề ===== */
-h3 {
-  color: #1e3a8a;
-  font-weight: 600;
-}
-
-/* ===== Nhãn input ===== */
-label.form-label {
-  font-weight: 500;
-  color: #334155;
-}
-
-/* ===== Input / select / textarea ===== */
-input.form-control,
-select.form-control,
-textarea.form-control {
-  border-radius: 10px;
-  border: 1px solid #cbd5e1;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-input.form-control:focus,
-select.form-control:focus,
-textarea.form-control:focus {
-  border-color: #1e3a8a;
-  box-shadow: 0 0 5px rgba(30, 58, 138, 0.5);
-}
-
-/* ===== Button ===== */
-button.btn {
-  border-radius: 10px;
-  font-weight: 600;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-button.btn:hover {
-  transform: scale(1.02);
+.preview-remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #0008;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }

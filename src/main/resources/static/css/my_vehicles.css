@@ -1,0 +1,16 @@
+.listing-item {
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 12px;
+    transition: 0.2s;
+}
+.listing-item:hover {
+    border-color: #ffd400;
+    box-shadow: 0 0 10px #ffd50040;
+}
+.thumbnail {
+    width: 150px;
+    height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+}
