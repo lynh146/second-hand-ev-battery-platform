@@ -1,4 +1,3 @@
- 
 package com.example.repository;
 
 import com.example.model.Payment;
@@ -11,6 +10,5 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     List<Payment> findByListing_ListingID(Long listingId);
 
-     
     List<Payment> findByStatus(String status);
 }
