@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.config.CustomUserDetails;
 import com.example.model.User;
 import com.example.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -31,6 +32,21 @@ public class UserController {
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).body(null);
+        }
+
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof CustomUserDetails custom) {
+            return ResponseEntity.ok(custom.getUser());
+        }
+
+        return ResponseEntity.status(401).body(null);
+    }
+
 
     @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable Long id) {

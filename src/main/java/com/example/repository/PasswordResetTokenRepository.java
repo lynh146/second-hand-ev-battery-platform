@@ -1,0 +1,14 @@
+package com.example.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.model.PasswordResetToken;
+import com.example.model.User;
+
+public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, Long> {
+
+    PasswordResetToken findByToken(String token);
+
+    PasswordResetToken findByUser(User user);
+    PasswordResetToken findByUser_Email(String email);
+}

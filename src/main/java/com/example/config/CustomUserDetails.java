@@ -1,15 +1,13 @@
 package com.example.config;
 
-import java.util.Collection;
-import java.util.List;
-
+import com.example.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.model.User;
-
-import lombok.RequiredArgsConstructor;
+import java.util.Collection;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
@@ -29,7 +27,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail();    
+        return user.getEmail();   
     }
 
     @Override
