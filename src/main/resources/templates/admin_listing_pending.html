@@ -1,15 +1,140 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
-      th:replace="admin/layout :: content">
-<body>
-<div>
-    <header class="page-header">
-        <h1 th:text="${pageTitle} ?: 'Tin chờ duyệt'">Tin chờ duyệt</h1>
-        <p class="text-muted">Danh sách các tin PENDING.</p>
-    </header>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý tin chờ duyệt</title>
 
-    <!-- phần panel + table pendingListings giữ nguyên như bạn đang có -->
-    ...
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f5f6fa;
+            font-family: system-ui, sans-serif;
+            margin: 0;
+        }
+
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 240px;
+            background: #111827;
+            color: #eee;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            color: #cbd5e1;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: .2s;
+        }
+
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        /* MAIN */
+        .content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .card {
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="admin-wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2>⚡ EV Admin</h2>
+
+        <nav>
+            <a th:href="@{/admin/dashboard}">🏠 Dashboard</a>
+            <a th:href="@{/admin/listings/pending}" class="active">📄 Tin chờ duyệt</a>
+            <a th:href="@{/admin/users}">👥 Người dùng</a>
+            <a th:href="@{/admin/transactions}">💳 Giao dịch</a>
+            <a th:href="@{/logout}">🚪 Đăng xuất</a>
+        </nav>
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+
+        <h2 class="fw-bold mb-3">📄 Tin chờ duyệt</h2>
+        <p class="text-muted mb-4">Danh sách các bài đăng đang chờ Admin kiểm duyệt.</p>
+
+        <div class="card shadow-sm p-3">
+
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tiêu đề</th>
+                        <th>Loại</th>
+                        <th>Giá</th>
+                        <th>Người đăng</th>
+                        <th>Ngày đăng</th>
+                        <th class="text-center">Hành động</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="item : ${pendingListings}">
+                    <td th:text="${item.listingID}">1</td>
+                    <td th:text="${item.title}">Xe ABC</td>
+                    <td th:text="${item.category}">Xe</td>
+                    <td th:text="${#numbers.formatDecimal(item.price,0,',','.')} + ' đ'"></td>
+                    <td th:text="${item.user.fullName}"></td>
+                    <td th:text="${#temporals.format(item.createdAt,'dd/MM/yyyy')}"></td>
+
+                    <td class="text-center">
+                        <form th:action="@{'/admin/listings/' + ${item.listingID} + '/approve'}"
+                              method="post" class="d-inline">
+                            <button class="btn btn-success btn-sm">✔ Duyệt</button>
+                        </form>
+
+                        <form th:action="@{'/admin/listings/' + ${item.listingID} + '/reject'}"
+                              method="post" class="d-inline">
+                            <button class="btn btn-danger btn-sm">✖ Từ chối</button>
+                        </form>
+                    </td>
+                </tr>
+
+                <tr th:if="${pendingListings.size() == 0}">
+                    <td colspan="7" class="text-center text-muted py-3">
+                        Không có tin nào đang chờ duyệt.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </main>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
