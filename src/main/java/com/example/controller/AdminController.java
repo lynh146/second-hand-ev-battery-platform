@@ -1,42 +1,48 @@
 package com.example.controller;
 
-import com.example.model.Admin;
+import com.example.repository.ListingRepository;
+import com.example.repository.PaymentRepository;
+import com.example.repository.TransactionRepository;
+import com.example.repository.UserRepository;
 import com.example.service.impl.AdminServiceImpl;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
     private final AdminServiceImpl adminService;
 
-    public AdminController(AdminServiceImpl adminService) {
-        this.adminService = adminService;
-    }
+    private final UserRepository userRepository;
+    private final ListingRepository listingRepository;
+    private final TransactionRepository transactionRepository;
+    private final PaymentRepository paymentRepository;
 
-    @GetMapping("/login")
-    public String showLoginPage() {
-        return "admin_login";
-    }
+@GetMapping("/dashboard")
+public String dashboard(Model model) {
 
-    @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password,
-                        Model model) {
-        Admin admin = adminService.login(email, password);
-        if (admin != null) {
-            model.addAttribute("admin", admin);
-            return "admin_dashboard";
-        } else {
-            model.addAttribute("error", "Sai email hoặc mật khẩu");
-            return "admin_login";
-        }
-    }
+    model.addAttribute("activePage", "dashboard");
+    model.addAttribute("pageTitle", "Admin Dashboard");
 
-    @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-        return "admin_dashboard";
-    }
+    long totalUsers = userRepository.count();
+    long totalListings = listingRepository.count();
+    long pendingListings = listingRepository.findByStatus("PENDING").size();
+    long totalTransactions = transactionRepository.count();
+    long successTransactions = transactionRepository.countByStatus("SUCCESS");
+
+    model.addAttribute("totalUsers", totalUsers);
+    model.addAttribute("totalListings", totalListings);
+    model.addAttribute("pendingListings", pendingListings);
+    model.addAttribute("totalTransactions", totalTransactions);
+    model.addAttribute("successTransactions", successTransactions);
+
+    return "admin_dashboard";
+}
+
 }
