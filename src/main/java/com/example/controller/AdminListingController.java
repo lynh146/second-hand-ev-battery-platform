@@ -1,18 +1,24 @@
 package com.example.controller;
 
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.example.model.Admin;
 import com.example.model.Listing;
 import com.example.model.Notification;
 import com.example.repository.AdminRepository;
 import com.example.repository.NotificationRepository;
 import com.example.service.IListingService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,24 +29,26 @@ public class AdminListingController {
     private final NotificationRepository notificationRepository;
     private final AdminRepository adminRepository;
 
+    // hien thi danh sach tin dang cho duyet
     @GetMapping("/pending")
     public String viewPendingListings(Model model) {
         model.addAttribute("pendingListings", listingService.getPendingListings());
-        // templates/admin_listing_approve.html
+
+        model.addAttribute("activePage", "listings-pending");
+        model.addAttribute("pageTitle", "Tin chờ duyệt");
+
         return "admin_listing_approve";
     }
 
-    // Admin duyệt tin (Approve)
+    // admin duyệt tin 
     @PostMapping("/{id}/approve")
     public String approveListing(@PathVariable Long id,
                                  RedirectAttributes redirectAttributes) {
 
-        // TODO: sau này lấy admin từ session / security
         Admin admin = adminRepository.findById(1L).orElse(null);
 
         Listing listing = listingService.approveListing(id, admin, true);
 
-       
         if (listing.getUser() != null) {
             Notification noti = Notification.builder()
                     .user(listing.getUser())
@@ -57,7 +65,7 @@ public class AdminListingController {
         return "redirect:/admin/listings/pending";
     }
 
-   
+    // admin từ chối tin
     @PostMapping("/{id}/reject")
     public String rejectListing(@PathVariable Long id,
                                 @RequestParam(name = "reason", required = false) String reason,
