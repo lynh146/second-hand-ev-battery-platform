@@ -16,4 +16,6 @@ public interface ITransactionService {
     Optional<Transaction> getTransactionById(Long id);
     Transaction createTransaction(Transaction transaction);   
     void deleteTransaction(Long id);
+    List<Transaction> getTransactionsByBuyer(Long buyerId);
+
 }
