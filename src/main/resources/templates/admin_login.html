@@ -1,21 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Đăng nhập Admin</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="fragments/header :: head(
+        'Đăng nhập Admin',
+        'admin_login.css',
+        null
+    )"></head>
+
 <body>
-  <h2>Đăng nhập Admin</h2>
-  <form action="/admin/login" method="post">
-    <label>Email:</label>
-    <input type="text" name="email" required><br><br>
+<div class="admin-login-wrapper">
+    <div class="admin-login-card">
+        <h2>Đăng nhập Admin</h2>
+        <form action="/admin/login" method="post">
+            <label>Email:</label>
+            <input type="text" name="email" required>
 
-    <label>Password:</label>
-    <input type="password" name="password" required><br><br>
+            <label>Password:</label>
+            <input type="password" name="password" required>
 
-    <button type="submit">Đăng nhập</button>
-  </form>
-
-  <p th:text="${error}" style="color:red"></p>
+            <button type="submit">Đăng nhập</button>
+        </form>
+        <p th:text="${error}" style="color:red"></p>
+    </div>
+</div>
 </body>
 </html>

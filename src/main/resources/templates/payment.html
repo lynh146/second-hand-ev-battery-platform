@@ -1,41 +1,183 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Thanh toán - EV Trading</title>
-    <link rel="stylesheet" href="../static/css/payment.css" />
-  </head>
-  <body>
-    <div class="payment-box">
-      <h2>Thanh toán</h2>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh toán đơn hàng - EV MARKET</title>
 
-      <div class="payment-item">
-        <p>Sản phẩm: <strong th:text="${item.name}"></strong></p>
-        <p>
-          Giá:
-          <span th:text="${#numbers.formatInteger(item.price, 0)} + 'đ'"></span>
-        </p>
-        <p>
-          Phí nền tảng 5%:
-          <span th:text="${#numbers.formatInteger(fee, 0)} + 'đ'"></span>
-        </p>
-        <p>
-          Tổng tiền:
-          <span
-            style="color: red"
-            th:text="${#numbers.formatInteger(total, 0)} + 'đ'"
-          ></span>
-        </p>
-      </div>
+    <!-- Bootstrap + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+          rel="stylesheet">
 
-      <form>
-        <label>Phương thức thanh toán:</label>
-        <select required>
-          <option value="momo">Momo</option>
-          <option value="bank">Ngân hàng</option>
-        </select>
-        <button class="btn-confirm">Xác nhận thanh toán</button>
-      </form>
+    <!-- CSS chung -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <!-- CSS riêng trang thanh toán -->
+    <link rel="stylesheet" href="/css/payment.css">
+</head>
+
+<body class="bg-light">
+
+<div th:replace="fragments/header :: header"></div>
+
+<main class="container payment-page py-4" style="margin-top: 80px;">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="bg-white rounded-4 shadow-sm p-3 p-md-4">
+
+                <!-- Header -->
+                <div class="d-flex align-items-center mb-3">
+                    <i class="fa-solid fa-shield-halved me-2 text-success"></i>
+                    <h4 class="mb-0 fw-bold">Thanh toán an toàn</h4>
+                </div>
+
+                <!-- Thông tin sản phẩm -->
+                <div class="d-flex gap-3 align-items-start mb-4">
+
+                    <img th:src="${item.images != null and !item.images.isEmpty()} ?
+                                  ${item.images.get(0).imageUrl} :
+                                  '/images/no-image.png'"
+                         alt="Ảnh sản phẩm"
+                         style="width: 96px; height: 96px; object-fit: cover; border-radius: 12px;">
+
+                    <div class="flex-grow-1">
+                        <div class="small text-muted mb-1">
+                            Tin đăng<br>
+                            <span class="fw-semibold" th:text="'#' + ${item.listingID}"></span>
+                        </div>
+                        <h5 class="fw-bold mb-2" th:text="${item.title}">Tên sản phẩm</h5>
+
+                        <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-3">
+                            <div>
+                                <span class="text-muted small">Giá sản phẩm:</span><br>
+                                <span class="fw-bold text-danger"
+                                      th:text="${#numbers.formatInteger(item.price, 0, 'POINT')} + ' đ'">
+                                </span>
+                            </div>
+                            <div>
+                                <span class="text-muted small">Phí nền tảng (5%):</span><br>
+                                <span class="fw-semibold"
+                                      th:text="${#numbers.formatInteger(fee, 0, 'POINT')} + ' đ'">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <!-- Tổng tiền + chọn phương thức -->
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <h6 class="fw-bold mb-3">Thông tin thanh toán</h6>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tạm tính</span>
+                            <span th:text="${#numbers.formatInteger(item.price, 0, 'POINT')} + ' đ'"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Phí nền tảng (5%)</span>
+                            <span th:text="${#numbers.formatInteger(fee, 0, 'POINT')} + ' đ'"></span>
+                        </div>
+                        <div class="d-flex justify-content-between border-top pt-2 mt-2">
+                            <span class="fw-bold">Tổng thanh toán</span>
+                            <span class="fw-bold fs-5 text-danger"
+                                  th:text="${#numbers.formatInteger(total, 0, 'POINT')} + ' đ'">
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h6 class="fw-bold mb-3">Phương thức thanh toán</h6>
+
+                        <form th:action="@{/payment/confirm}" method="post" id="paymentForm">
+
+                            <!-- Hidden: listingId, buyerId, totalAmount -->
+                            <input type="hidden" name="listingId" th:value="${item.listingID}">
+                            <input type="hidden" name="buyerId" id="buyerId">
+                            <input type="hidden" name="totalAmount" th:value="${total}">
+
+                            <div class="mb-3">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio"
+                                           name="paymentMethod" id="pmMomo"
+                                           value="MOMO" checked>
+                                    <label class="form-check-label" for="pmMomo">
+                                        <img src="https://developers.momo.vn/images/logo.svg"
+                                             alt="MoMo" style="height: 18px; margin-right: 4px;">
+                                        Thanh toán qua ví MoMo
+                                    </label>
+                                </div>
+
+                                <div class="form-check text-muted">
+                                    <input class="form-check-input" type="radio"
+                                           name="paymentMethod" id="pmBank" value="BANK" disabled>
+                                    <label class="form-check-label" for="pmBank">
+                                        Chuyển khoản ngân hàng (Đang phát triển)
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit"
+                                    class="btn btn-danger w-100 py-2 fw-bold">
+                                <i class="fa-solid fa-wallet me-2"></i>
+                                Thanh toán ngay
+                            </button>
+
+                            <p class="text-muted small mt-2 mb-0">
+                                Bằng việc tiếp tục, bạn đồng ý với
+                                <a href="#" class="text-decoration-none">Điều khoản sử dụng</a>
+                                của EV MARKET.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     </div>
-  </body>
+
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/header.js}"></script>
+
+<script>
+    // Lấy buyerId từ /api/users/me giống style header.js
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch("/api/users/me")
+            .then(res => {
+                if (res.status === 401) {
+                    alert("Bạn cần đăng nhập để tiếp tục thanh toán.");
+                    window.location.href = "/login";
+                    return null;
+                }
+                if (!res.ok) {
+                    alert("Không lấy được thông tin người dùng.");
+                    return null;
+                }
+                return res.json();
+            })
+            .then(user => {
+                if (!user) return;
+                const buyerField = document.getElementById("buyerId");
+                if (buyerField) {
+                    buyerField.value = user.userID; // field entity User: userID
+                }
+            })
+            .catch(() => {
+                alert("Lỗi kết nối khi lấy thông tin người dùng.");
+            });
+    });
+</script>
+
+</body>
 </html>

@@ -1,0 +1,26 @@
+.wallet-page {
+    background-color: #f5f7fb;
+    min-height: 60vh;
+}
+
+.wallet-card {
+    border: 1px solid #eee;
+}
+
+.wallet-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #ffe9b3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: #ff9800;
+}
+
+.wallet-balance {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #e53935;
+}

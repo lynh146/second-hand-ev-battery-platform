@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lịch sử giao dịch - EV MARKET</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/transactions.css">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div th:replace="fragments/header :: header"></div>
+
+<section class="container py-5">
+
+    <h2 class="fw-bold mb-4">
+        <i class="fa-solid fa-receipt me-2"></i>
+        Lịch sử giao dịch của bạn
+    </h2>
+
+    <div class="table-responsive rounded-4 shadow-sm bg-white p-3">
+
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+            <tr>
+                <th>Mã GD</th>
+                <th>Sản phẩm</th>
+                <th>Số tiền</th>
+                <th>Trạng thái</th>
+                <th>Ngày tạo</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="tx : ${transactions}">
+
+                <!-- Mã giao dịch -->
+                <td th:text="${tx.transactionID}"></td>
+
+                <!-- Sản phẩm -->
+                <td>
+                    <!-- Nếu listing còn tồn tại -->
+                    <a th:if="${tx.listing != null}"
+                       th:href="@{'/listings/' + ${tx.listing.listingID}}"
+                       class="text-decoration-none text-dark">
+                        <strong th:text="${tx.listing.title}"></strong>
+                    </a>
+
+                    <!-- Nếu listing bị xoá -->
+                    <span th:if="${tx.listing == null}"
+                          class="text-muted fst-italic">
+                        Tin đăng đã bị xoá
+                    </span>
+                </td>
+
+                <!-- Số tiền -->
+                <td class="text-danger fw-bold"
+                    th:text="${#numbers.formatInteger(tx.totalAmount, 3, 'POINT')} + ' đ'">
+                </td>
+
+                <!-- Trạng thái -->
+                <td>
+                    <span class="badge rounded-pill px-3"
+                          th:classappend="${tx.status == 'SUCCESS' ? 'bg-success' :
+                                           tx.status == 'FAILED' ? 'bg-danger' :
+                                           'bg-secondary'}"
+                          th:text="${tx.status}">
+                    </span>
+                </td>
+
+                <!-- Ngày tạo -->
+                <td th:text="${#temporals.format(tx.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+
+                <!-- Xem chi tiết giao dịch -->
+                <td>
+                    <a th:href="@{'/member/transactions/' + ${tx.transactionID}}"
+                       class="btn btn-sm btn-outline-primary">
+                        Chi tiết
+                    </a>
+                </td>
+
+            </tr>
+
+            <!-- Nếu không có giao dịch -->
+            <tr th:if="${transactions.size() == 0}">
+                <td colspan="6" class="text-center text-muted py-4">
+                    <i class="fa-regular fa-circle-xmark me-2"></i>
+                    Bạn chưa có giao dịch nào.
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer th:replace="fragments/footer :: footer"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/header.js}"></script>
+</body>
+</html>

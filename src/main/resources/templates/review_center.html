@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Đánh giá của tôi - EV MARKET</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+
+    <style>
+        body {
+            background: #f7f8fa;
+        }
+        .review-header {
+            background: #fff3cd;
+            color: #b45309;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            padding: 12px 22px;
+            font-size: 16px;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            color: #f8b100;
+            border-color: #f8b100;
+        }
+        .review-card {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+        .review-stars i {
+            color: #f5b301;
+        }
+        .empty-state {
+            margin-top: 40px;
+            text-align: center;
+            color: #888;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container py-4">
+
+    <!-- Banner trên cùng -->
+    <div class="review-header">
+        ⭐ Đánh giá & phản hồi giữa người mua – người bán
+    </div>
+
+    <!-- TAB -->
+    <div class="d-flex border-bottom mb-3">
+        <a th:href="@{/member/reviews?tab=pending}"
+           class="tab-btn"
+           th:classappend="${tab == 'pending'} ? ' active'">
+            Chờ đánh giá
+        </a>
+
+        <a th:href="@{/member/reviews?tab=received}"
+           class="tab-btn ms-4"
+           th:classappend="${tab == 'received'} ? ' active'">
+            Đánh giá về tôi
+        </a>
+
+        <a th:href="@{/member/reviews?tab=written}"
+           class="tab-btn ms-4"
+           th:classappend="${tab == 'written'} ? ' active'">
+            Tôi đã đánh giá
+        </a>
+    </div>
+
+    <!-- DANH SÁCH REVIEW -->
+<div th:if="${tab == 'pending'}">
+
+    <div th:each="tx : ${pendingReviews}">
+        <div class="review-card d-flex justify-content-between align-items-center">
+            <div>
+                <div class="fw-bold">Giao dịch #<span th:text="${tx.transactionID}"></span></div>
+                <div class="text-muted">
+                    Sản phẩm: <span th:text="${tx.listing.title}"></span>
+                </div>
+            </div>
+
+            <a th:href="@{'/member/reviews/form/' + ${tx.transactionID}}" class="btn btn-warning">
+                Đánh giá ngay
+            </a>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(pendingReviews)}" class="empty-state">
+        Không có giao dịch chờ đánh giá.
+    </div>
+
+</div>
+
+
+<div th:if="${tab == 'received'}">
+
+<div th:each="rv : ${receivedReviews}">
+    <div class="review-card">
+        <div class="fw-bold">
+            <span th:text="${rv.reviewer.fullName}"></span> đã đánh giá bạn
+        </div>
+
+        <div class="text-muted mb-1">
+            Sản phẩm: 
+            <a th:href="@{'/listings/' + ${rv.transaction.listing.listingID}}">
+                <span th:text="${rv.transaction.listing.title}"></span>
+            </a>
+        </div>
+
+        <div class="review-stars mt-1">
+            <i class="fa-solid fa-star"
+               th:each="i : ${#numbers.sequence(1, rv.rating)}"></i>
+        </div>
+
+        <div class="mt-2" th:text="${rv.comment}"></div>
+    </div>
+</div>
+
+
+</div>
+
+
+<div th:if="${tab == 'written'}">
+
+<div th:each="rv : ${writtenReviews}">
+    <div class="review-card">
+        <div class="fw-bold">
+            Bạn đã đánh giá <span th:text="${rv.target.fullName}"></span>
+        </div>
+
+        <div class="text-muted mb-1">
+            Sản phẩm:
+            <a th:href="@{'/listings/' + ${rv.transaction.listing.listingID}}">
+                <span th:text="${rv.transaction.listing.title}"></span>
+            </a>
+        </div>
+
+        <div class="review-stars mt-1">
+            <i class="fa-solid fa-star"
+               th:each="i : ${#numbers.sequence(1, rv.rating)}"></i>
+        </div>
+
+        <div class="mt-2" th:text="${rv.comment}"></div>
+    </div>
+</div>
+
+
+</div>
+
+
+<!-- FOOTER -->
+<footer th:replace="fragments/footer :: footer"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/header.js}"></script>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle} ?: 'Quản lý giao dịch'">Quản lý giao dịch</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/admin_dashboard.css}">
+</head>
+<body>
+<div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>EV Admin</h2>
+            <p class="sidebar-subtitle">Control panel</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a th:href="@{/admin/dashboard}"
+               th:classappend="${activePage}=='dashboard' ? ' active'">
+                🏠 Dashboard
+            </a>
+            <a th:href="@{/admin/listings/pending}"
+               th:classappend="${activePage}=='listings-pending' ? ' active'">
+                📄 Tin chờ duyệt
+            </a>
+            <a th:href="@{/admin/users}"
+               th:classappend="${activePage}=='users' ? ' active'">
+                👥 Người dùng
+            </a>
+            <a th:href="@{/admin/transactions}"
+               th:classappend="${activePage}=='transactions' ? ' active'">
+                💰 Giao dịch
+            </a>
+            <a th:href="@{/admin/complaints}"
+               th:classappend="${activePage}=='complaints' ? ' active'">
+                ⚠️ Khiếu nại
+            </a>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="page-header">
+            <h1 th:text="${pageTitle} ?: 'Quản lý giao dịch'">Quản lý giao dịch</h1>
+            <p class="text-muted">Danh sách các giao dịch ví, thanh toán trên hệ thống.</p>
+        </header>
+
+        <section class="panel" style="margin-top: 16px;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="panel-title">Danh sách giao dịch</h2>
+                <form class="d-flex gap-2" method="get">
+                    <input type="text" name="q" class="form-control form-control-sm"
+                           placeholder="Tìm theo user / mã giao dịch" th:value="${param.q}">
+                    <button class="btn btn-sm btn-primary" type="submit">Tìm</button>
+                </form>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Loại</th>
+                        <th>Số tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Thời gian</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="tx, stat : ${transactions}">
+                        <td th:text="${stat.count}">1</td>
+                        <!-- đổi field cho đúng với Transaction entity -->
+                        <td th:text="${tx.id}">1</td>
+                        <td th:text="${tx.user != null ? tx.user.fullName : 'N/A'}">Tên user</td>
+                        <td th:text="${tx.type}">DEPOSIT</td>
+                        <td th:text="${#numbers.formatDecimal(tx.amount, 0, 'POINT', 0, 'COMMA')} + ' ₫'">
+                            0 ₫
+                        </td>
+                        <td>
+                            <span th:if="${tx.status == 'SUCCESS'}" class="badge bg-success">Thành công</span>
+                            <span th:if="${tx.status == 'PENDING'}" class="badge bg-warning text-dark">Đang xử lý</span>
+                            <span th:if="${tx.status == 'FAILED'}" class="badge bg-danger">Thất bại</span>
+                        </td>
+                        <td th:text="${#temporals.format(tx.createdAt, 'dd/MM/yyyy HH:mm')}">
+                            01/01/2025 12:00
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(transactions)}">
+                        <td colspan="7" class="text-center text-muted py-4">
+                            Chưa có giao dịch nào.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+</body>
+</html>

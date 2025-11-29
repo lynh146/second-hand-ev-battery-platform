@@ -1,0 +1,12 @@
+table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.btn-sm {
+    padding: 4px 10px;
+}
+
+.modal-body img {
+    max-height: 320px;
+    object-fit: cover;
+}

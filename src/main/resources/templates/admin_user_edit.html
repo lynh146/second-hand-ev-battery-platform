@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="admin/layout :: content">
+<body>
+<div>
+    <header class="page-header">
+        <h1 th:text="${pageTitle} ?: 'Chỉnh sửa người dùng'">Chỉnh sửa người dùng</h1>
+        <p class="text-muted">Cập nhật thông tin tài khoản.</p>
+    </header>
+
+    <section class="panel" style="margin-top: 16px;">
+        <form th:action="@{/admin/users/update}"
+              th:object="${user}"
+              method="post" class="row g-3">
+
+            <!-- ID ẩn để update đúng user -->
+            <input type="hidden" th:field="*{userID}"/>
+
+            <div class="col-md-6">
+                <label class="form-label">Họ tên</label>
+                <input type="text" class="form-control" th:field="*{fullName}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" th:field="*{email}" required>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Số điện thoại</label>
+                <input type="text" class="form-control" th:field="*{phoneNumber}">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Vai trò</label>
+                <select class="form-select" th:field="*{role}">
+                    <option value="MEMBER">MEMBER</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select>
+            </div>
+
+            <!-- Nếu bạn có field trạng thái (vd: status / enabled) thì thêm vào đây -->
+            <!--
+            <div class="col-md-4">
+                <label class="form-label d-block">Trạng thái</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" th:field="*{enabled}">
+                    <label class="form-check-label">Hoạt động</label>
+                </div>
+            </div>
+            -->
+
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                <a th:href="@{/admin/users}" class="btn btn-outline-secondary ms-2">Quay lại</a>
+            </div>
+        </form>
+    </section>
+</div>
+</body>
+</html>

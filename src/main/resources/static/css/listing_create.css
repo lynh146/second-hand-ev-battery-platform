@@ -17,6 +17,7 @@ input, textarea, select {
     border-radius: 12px !important;
 }
 
+/* Vùng preview ảnh */
 .image-preview-area {
     display: flex;
     flex-wrap: wrap;

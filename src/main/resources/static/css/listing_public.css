@@ -60,6 +60,7 @@
     overflow: hidden;
 }
 
+/* Compare bar dạng thanh dưới đáy */
 .compare-bar {
     position: fixed;
     bottom: 0;
@@ -106,6 +107,7 @@
     font-size: 14px;
 }
 
+/* Nút lưu tin đã active */
 #btnSaveListing.saved {
     background: #ffefef;
     border-color: #ff7070;
