@@ -4,8 +4,13 @@ import com.example.model.Review;
 import com.example.model.Transaction;
 import com.example.model.User;
 import com.example.repository.ReviewRepository;
+import com.example.repository.TransactionRepository;
+import com.example.repository.UserRepository;
+
 import com.example.service.IReviewService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,38 +24,60 @@ import java.util.List;
 @Transactional
 public class ReviewServiceImpl implements IReviewService {
 
-    private final ReviewRepository reviewRepository;
+    private final ReviewRepository reviewRepo;
+    private final TransactionRepository txRepo;
+    private final UserRepository userRepo;
 
     @Override
-    public void writeReview(User user, Transaction transaction, String comment, int rating) {
-        if (rating < 1 || rating > 5) {
-            throw new IllegalArgumentException("Rating must be between 1 and 5");
-        }
-        if (transaction == null) {
-            throw new IllegalArgumentException("Transaction must not be null");
-        }
-
-        if (comment == null) comment = "";
-
-        Review review = new Review();
-        review.setReviewer(user);              
-        review.setTransaction(transaction);    
-        review.setComment(comment);
-        review.setRating(rating);
-        review.setCreatedAt(LocalDateTime.now());
-
-        reviewRepository.save(review);
+    public boolean canReview(Long txId, Long reviewerId) {
+        return !reviewRepo.existsByTransaction_TransactionIDAndReviewer_UserID(txId, reviewerId);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Review> getReviewsByListing(Long listingID) {
-        return reviewRepository.findByTransactionListingListingID(listingID);
+    public void writeReview(Long txId, Long reviewerId, int rating, String comment) {
+
+        Transaction tx = txRepo.findById(txId)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        User reviewer = userRepo.findById(reviewerId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        User target = tx.getBuyer().getUserID().equals(reviewerId)
+                ? tx.getSeller()
+                : tx.getBuyer();
+
+        Review review = Review.builder()
+                .transaction(tx)
+                .reviewer(reviewer)
+                .target(target)
+                .rating(rating)
+                .comment(comment)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        reviewRepo.save(review);
+
+        tx.setReview(review);
+        txRepo.save(tx);
     }
 
     @Override
-    @Transactional(readOnly = true)
+    public List<Review> getReviewsOfUser(Long userId) {
+        return reviewRepo.findByTarget_UserID(userId);
+    }
+
+    @Override
+    public List<Review> getReviewsWritten(Long reviewerId) {
+        return reviewRepo.findByReviewer_UserID(reviewerId);
+    }
+
+    @Override
+    public List<Transaction> getPendingReviews(Long userId) {
+        return txRepo.findByBuyer_UserIDAndReviewIsNull(userId);
+    }
+
+    @Override
     public Page<Review> getReviewsByListing(Long listingID, Pageable pageable) {
-        return reviewRepository.findByTransactionListingListingID(listingID, pageable);
+        return reviewRepo.findByTransactionListingListingID(listingID, pageable);
     }
 }

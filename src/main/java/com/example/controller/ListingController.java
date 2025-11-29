@@ -1,4 +1,3 @@
-// Module: 2. Listing Manager (Trần Đoàn Tiến Đạt)
 package com.example.controller;
 
 import com.example.model.Listing;

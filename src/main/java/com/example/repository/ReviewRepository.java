@@ -14,4 +14,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByTransactionListingListingID(Long listingID);
 
     Page<Review> findByTransactionListingListingID(Long listingID, Pageable pageable);
+
+    boolean existsByTransaction_TransactionIDAndReviewer_UserID(Long txId, Long userId);
+
+    List<Review> findByTarget_UserID(Long userId);
+
+    List<Review> findByReviewer_UserID(Long reviewerId);
+
 }
