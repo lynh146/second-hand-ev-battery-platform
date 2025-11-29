@@ -1,51 +1,69 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:fragment="head(title)">
-    <meta charset="UTF-8" />
-    <title th:text="${title}">EV Second-hand Platform</title>
-    <link rel="stylesheet" th:href="@{/css/base.css}" />
-    <!-- Mỗi trang có thể truyền CSS riêng qua extraCss -->
-    <th:block th:insert="${extraCss}"></th:block>
-</head>
+<header th:fragment="header" class="ct-header">
 
-<body th:fragment="site-header">
-<header class="site-header">
-    <div class="container header-inner">
-        <a th:href="@{/}" class="brand">
-            <span class="brand-logo">⚡</span>
-            <span class="brand-text">
-                <span class="brand-name">EV Trade</span>
-                <span class="brand-sub">Second-hand EV &amp; Battery</span>
-            </span>
-        </a>
+    <div class="container d-flex align-items-center justify-content-between py-2">
 
-        <nav class="main-nav">
-            <a th:href="@{/}" class="nav-link">Trang chủ</a>
-            <a th:href="@{/search}" class="nav-link">Tìm kiếm</a>
-            <a th:href="@{/member/dashboard}" class="nav-link">Tin đăng của tôi</a>
-        </nav>
-
-        <!-- GUEST: chưa đăng nhập -->
-        <div class="header-actions header-actions-guest" sec:authorize="isAnonymous()">
-            <a th:href="@{/login}" class="btn btn-ghost">Đăng nhập</a>
-            <a th:href="@{/register}" class="btn btn-primary">Đăng ký</a>
+        <!-- LEFT -->
+        <div class="d-flex align-items-center gap-3">
+            <a href="/" class="ct-logo-text">EV MARKET</a>
         </div>
 
-        <!-- USER: đã đăng nhập -->
-        <div class="header-actions header-actions-user" sec:authorize="isAuthenticated()">
-            <span class="user-name">
-                <!-- Lấy tên đăng nhập từ Spring Security -->
-                <span sec:authentication="name">User Name</span>
-            </span>
-            <a th:href="@{/member/dashboard}" class="btn btn-ghost">Bảng tin</a>
+        <!-- SEARCH -->
+        <div class="ct-search flex-grow-1 mx-4">
+            <div class="input-group ct-search-box">
+                <input type="text" class="form-control" id="headerSearchInput"
+                       placeholder="Tìm xe điện, pin EV, phụ tùng...">
+                <button class="btn ct-search-btn" type="button">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
 
-            <!-- Logout là POST /logout -->
-            <form th:action="@{/logout}" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-outline">Đăng xuất</button>
-            </form>
+        <!-- RIGHT -->
+        <div class="header-icons d-flex align-items-center gap-3">
+
+        <!-- Favorite Button -->
+        <div class="position-relative">
+            <a id="favoriteBtn" class="icon-round">
+                <i class="fa-regular fa-heart"></i>
+            </a>
+
+            <!-- Popup yêu thích -->
+            <div id="favoritePopup" class="fav-popup d-none">
+                <div class="fav-popup-header d-flex justify-content-between">
+                    <span>Tin đăng đã lưu</span>
+                    <a href="/member/favorites" class="see-all">Xem tất cả</a>
+                </div>
+                <!-- 👇 ID NÀY RẤT QUAN TRỌNG -->
+                <div id="favoritePopupList"></div>
+            </div>
+        </div>
+
+
+            <a id="chatBtn" class="icon-round"><i class="fa-regular fa-comment-dots"></i></a>
+
+            <a id="notifyBtn" class="icon-round position-relative">
+                <i class="fa-regular fa-bell"></i>
+                <span id="notifyBadge"
+                      class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle d-none">0</span>
+            </a>
+
+            <a href="/login" id="loginBtn" class="btn ct-login-btn">Đăng nhập</a>
+
+            <a href="/member/listings/create" class="btn ct-post-btn">Đăng tin</a>
+
+            <!-- USER DROPDOWN BUTTON -->
+            <button class="icon-round dropdown-toggle"
+                    id="userMenuBtn"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                <i class="fa-regular fa-circle-user"></i>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end p-2"
+                id="userMenuList">
+            </ul>
+
         </div>
     </div>
 </header>
-</body>
-</html>
+

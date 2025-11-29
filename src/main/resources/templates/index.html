@@ -1,129 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>EV MARKET – Mua bán xe điện & pin EV</title>
 
-<head th:replace="fragments/header :: head('EVMarket - Mua bán xe & pin EV', 'index.css', 'index.js')"></head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/footer.css">
+</head>
 
 <body>
+
+<!-- HEADER -->
 <div th:replace="fragments/header :: header"></div>
 
-<!-- HERO -->
-<section class="hero-section">
-    <div class="container py-5">
-        <div class="row align-items-center gy-4">
-            <div class="col-lg-6">
-                <span class="badge-soft mb-3 d-inline-flex align-items-center gap-2">
-                    ⚡ Nền tảng giao dịch xe & pin EV
-                </span>
-                <h1 class="hero-title mb-3">
-                    Tìm chiếc xe điện<br/>hoặc pin phù hợp cho bạn
-                </h1>
-                <p class="hero-subtitle mb-4">
-                    Khám phá thị trường EV cũ với hàng chục tin đăng được kiểm duyệt,
-                    thanh toán an toàn, giao dịch minh bạch.
-                </p>
 
-                <form class="hero-search d-flex gap-2"
-                      th:action="@{/search}" method="get">
-                    <input type="text" class="form-control hero-search-input"
-                           name="keyword" placeholder="Tìm theo tên xe, pin, hãng..."
-                           aria-label="Từ khóa tìm kiếm">
-                    <button class="btn btn-ev-primary" type="submit">
-                        Tìm ngay
-                    </button>
-                </form>
-
-                <div class="hero-stats mt-4 d-flex flex-wrap gap-4">
-                    <div>
-                        <div class="hero-stat-number" th:text="${#lists.size(featuredListings)}">24</div>
-                        <div class="hero-stat-label">Tin nổi bật</div>
-                    </div>
-                    <div>
-                        <div class="hero-stat-number">4.9★</div>
-                        <div class="hero-stat-label">Mức độ hài lòng</div>
-                    </div>
-                    <div>
-                        <div class="hero-stat-number">100%</div>
-                        <div class="hero-stat-label">Thanh toán an toàn</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="hero-visual ev-card p-3">
-                    <!-- ảnh demo / placeholder -->
-                    <div class="hero-visual-banner rounded-4 mb-3"></div>
-                    <div class="d-flex justify-content-between small text-muted px-2">
-                        <span>Xe & Pin EV đã kiểm duyệt</span>
-                        <span>🚘 + 🔋</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- ======================= BANNER ======================= -->
+<section class="ev-banner">
+    <div class="container text-center py-5">
+        <h1 class="banner-title">Mua bán xe điện & pin EV</h1>
+        <p class="banner-sub">Nhanh chóng – Uy tín – An toàn</p>
     </div>
 </section>
 
-<!-- FEATURED LISTINGS -->
-<section class="featured-section py-4">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-end mb-3">
-            <div>
-                <h2 class="section-title mb-0">Tin đăng nổi bật</h2>
-                <p class="section-subtitle mb-0">
-                    Những xe & pin được duyệt và có đánh giá tốt.
-                </p>
-            </div>
-            <a href="/search" class="btn btn-sm btn-outline-primary rounded-pill">
-                Xem tất cả
+
+<!-- ======================= DANH MỤC ======================= -->
+<section class="categories container py-5">
+    <h3 class="fw-bold mb-4">Danh mục</h3>
+
+    <div class="row justify-content-center g-4">
+
+        <div class="col-6 col-md-3">
+            <a href="/search?category=xe" class="cat-box">
+                <i class="fa-solid fa-car fa-3x mb-2"></i>
+                <div class="cat-text">Xe điện</div>
             </a>
         </div>
 
-        <div class="row g-4">
-            <div class="col-12" th:if="${#lists.isEmpty(featuredListings)}">
-                <div class="ev-card p-4 text-center text-muted">
-                    Chưa có tin nổi bật. Hãy quay lại sau nhé.
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4"
-                 th:each="listing : ${featuredListings}">
-                <a class="text-decoration-none text-reset"
-                   th:href="@{/listings/{id}(id=${listing.listingID})}">
-                    <div class="ev-card featured-card h-100">
-                        <div class="featured-thumb"></div>
-                        <div class="p-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <h5 class="featured-title mb-0"
-                                    th:text="${listing.title}">Tesla Model 3 – Pin 75kWh</h5>
-                                <span class="badge-soft"
-                                      th:text="${listing.status}">PUBLIC</span>
-                            </div>
-
-                            <p class="featured-desc mb-2 text-truncate-2"
-                               th:text="${listing.description}">
-                                Mô tả ngắn của tin đăng, tự động cắt dòng sau 2 dòng...
-                            </p>
-
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="price"
-                                     th:text="${#numbers.formatDecimal(listing.price,0,'COMMA',0,'POINT')} + ' đ'">
-                                    500.000.000 đ
-                                </div>
-                                <div class="small text-muted">
-                                    <i class="bi bi-clock"></i>
-                                    <span th:text="${#temporals.format(listing.createdAt,'dd/MM/yyyy')}">
-                                        10/11/2025
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-
+        <div class="col-6 col-md-3">
+            <a href="/search?category=pin" class="cat-box">
+                <i class="fa-solid fa-battery-full fa-3x mb-2"></i>
+                <div class="cat-text">Pin EV</div>
+            </a>
         </div>
+
     </div>
 </section>
 
+
+<!-- ======================= FEATURED LISTINGS ======================= -->
+<section class="container py-4">
+    <h3 class="fw-bold mb-4">Sản phẩm nổi bật</h3>
+
+    <div id="featuredList" class="row g-4">
+        <!-- JS load -->
+    </div>
+</section>
+
+
+<!-- FOOTER -->
 <div th:replace="fragments/footer :: footer"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/header.js}"></script>
+<script th:src="@{/js/index.js}"></script>
+
 </body>
 </html>

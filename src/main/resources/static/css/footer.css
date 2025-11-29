@@ -1,0 +1,37 @@
+.ct-footer {
+    background: #F7F7F7;      /* MÀU NỀN CHUẨN */
+    padding: 40px 0;
+    color: #333;
+    border-top: 1px solid #e0e0e0;
+}
+
+.ct-footer h5, .ct-footer h6 {
+    font-weight: 700;
+    color: #222;
+}
+
+.ct-footer a {
+    color: #555;
+    text-decoration: none;
+}
+
+.ct-footer a:hover {
+    color: #111;
+    text-decoration: underline;
+}
+
+.ct-footer .social-icons i {
+    font-size: 26px;
+    color: #333;
+    cursor: pointer;
+}
+
+.ct-footer .social-icons i:hover {
+    color: #000;
+}
+
+.ct-footer .copyright {
+    text-align: center;
+    margin-top: 20px;
+    color: #888;
+}
