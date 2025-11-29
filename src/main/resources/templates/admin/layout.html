@@ -1,0 +1,48 @@
+<div th:fragment="admin_layout">
+
+    <div class="admin-wrapper d-flex">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar p-3">
+            <h2 class="text-white">⚡ EV Admin</h2>
+
+            <nav class="mt-3 d-flex flex-column gap-2">
+
+                <a th:href="@{/admin/dashboard}"
+                   th:classappend="${activePage}=='dashboard' ? ' active'">
+                    🏠 Dashboard
+                </a>
+
+                <a th:href="@{/admin/listings/pending}"
+                   th:classappend="${activePage}=='listings-pending' ? ' active'">
+                    📄 Tin chờ duyệt
+                </a>
+
+                <a th:href="@{/admin/users}"
+                   th:classappend="${activePage}=='users' ? ' active'">
+                    👥 Người dùng
+                </a>
+
+                <a th:href="@{/admin/transactions}"
+                   th:classappend="${activePage}=='transactions' ? ' active'">
+                    💳 Giao dịch
+                </a>
+
+                <a th:href="@{/logout}">
+                    🚪 Đăng xuất
+                </a>
+
+            </nav>
+        </aside>
+
+        <!-- MAIN -->
+        <main class="content p-4 w-100">
+
+            <!-- Trang con sẽ được nhét vào đây -->
+            <div th:fragment="content"></div>
+
+        </main>
+
+    </div>
+
+</div>
