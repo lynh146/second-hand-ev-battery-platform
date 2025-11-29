@@ -33,7 +33,11 @@ public class Transaction {
     @OneToOne
     @JoinColumn(name = "PaymentID")
     private Payment payment;
+    
+    @OneToOne(mappedBy = "transaction", cascade = CascadeType.ALL)
+    private Review review;
 
+    
     @Column(name = "ContractContent")
     private String contractContent;
 
@@ -45,7 +49,6 @@ public class Transaction {
 
     @Column(name = "Status")
     private String status;
-    
 
     @ManyToOne
     @JoinColumn(name = "ApprovedBy")
